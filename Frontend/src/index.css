@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+  font-family: system-ui, Helvetica , Arial, sans-serif;
+}
+
+.flex-prince ::-webkit-scrollbar {
+  display: none;
+}
