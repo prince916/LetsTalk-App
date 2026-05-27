@@ -7,7 +7,7 @@ const userSchema = mongoose.Schema({
     confirmpassword: {type: String, require: true}
 },
 {
-    timstamps: true, // createdAt & updatedAt
+    timestamps: true, // createdAt & updatedAt
 });
 
 const User = mongoose.model("User", userSchema);
