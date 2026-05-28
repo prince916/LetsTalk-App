@@ -1,13 +1,50 @@
 import React from "react";
-// import { useForm } from "react-hook-form";
-// import axios from "axios";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function Signup() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const password = watch("password", "");
+  const confirmPassword = watch("confirmPassword", "");
+
+  const validatePasswordMatch = (value) => {
+    return value === password || "Passwords do not match";
+  };
+
+  const onSubmit = async (data) => {
+    const userInfo = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      confirmPassword: data.confirmPassword,
+    };
+
+    await axios
+      .post("http://localhost:5002/user/signup", userInfo)
+      .then((response) => {
+        // console.log(response.data);
+        if (response.data) {
+          alert("Signup Successful! You can now log in.");
+        }
+        localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          alert("Error:" + error.response.data.message);
+        }
+      }); 
+  };
   return (
     <>
       <div className="flex h-screen items-center justify-center bg-blue-100">
         <form
-          //   onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit)}
           className="border-2 border-black  px-6 py-4 rounded-lg space-y-3 w-96 bg-blue-100 duration-300"
         >
           <h1 className="text-3xl items-center text-cyan-400 font-bold">
@@ -33,14 +70,15 @@ export default function Signup() {
               type="text"
               className="grow"
               placeholder="Fullname"
-              //   {...register("fullname", { required: true })}
+              {...register("fullname", { required: true })}
             />
           </label>
-          {/* {errors.fullname && (
+          {errors.fullname && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>
-          )} */}
+          )}
+
           {/* Email */}
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -56,14 +94,14 @@ export default function Signup() {
               type="email"
               className="grow"
               placeholder="Email"
-              //   {...register("email", { required: true })}
+              {...register("email", { required: true })}
             />
           </label>
-          {/* {errors.email && (
+          {errors.email && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>
-          )} */}
+          )}
 
           {/* Password */}
           <label className="input input-bordered flex items-center gap-2">
@@ -83,14 +121,14 @@ export default function Signup() {
               type="password"
               className="grow"
               placeholder="password"
-              //   {...register("password", { required: true })}
+              {...register("password", { required: true })}
             />
           </label>
-          {/* {errors.password && (
+          {errors.password && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>
-          )} */}
+          )}
 
           {/*Confirm Password */}
           <label className="input input-bordered flex items-center gap-2">
@@ -110,17 +148,17 @@ export default function Signup() {
               type="password"
               className="grow"
               placeholder="confirm password"
-              //   {...register("confirmPassword", {
-              //     required: true,
-              //     validate: validatePasswordMatch,
-              //   })}
+              {...register("confirmPassword", {
+                required: true,
+                validate: validatePasswordMatch,
+              })}
             />
           </label>
-          {/* {errors.confirmPassword && (
+          {errors.confirmPassword && (
             <span className="text-red-500 text-sm font-semibold">
               {errors.confirmPassword.message}
             </span>
-          )} */}
+          )}
 
           {/* Text & Button */}
           <div className="flex justify-center pt-3 pb-3">

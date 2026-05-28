@@ -1,3 +1,4 @@
+import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 import Left from "./home/left/Left";
 import Logout from "./home/left1/Logout";
@@ -12,6 +13,7 @@ export default function () {
         <Right></Right>
       </div> */}
       <Signup ></Signup>
+      {/* <Login></Login> */}
     </>
   );
 }
