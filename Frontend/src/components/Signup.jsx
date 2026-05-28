@@ -70,10 +70,10 @@ export default function Signup() {
               type="text"
               className="grow"
               placeholder="Fullname"
-              {...register("fullname", { required: true })}
+              {...register("name", { required: true })}
             />
           </label>
-          {errors.fullname && (
+          {errors.name && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>

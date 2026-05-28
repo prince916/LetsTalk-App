@@ -1,23 +1,52 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const userInfo = {
+      
+      email: data.email,
+      password: data.password,
+      
+    };
+
+    await axios
+      .post("http://localhost:5002/user/login", userInfo)
+      .then((response) => {
+        // console.log(response.data);
+        if (response.data) {
+          alert("Login Successful!");
+        }
+        localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        if (error.response) {
+          alert("Error:" + error.response.data.message);
+        }
+      });
+  };
   return (
     <>
       <div>
         <div className="flex h-screen items-center justify-center bg-blue-100">
           <form
-            //   onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(onSubmit)}
             className="border-2 border-black  px-6 py-4 rounded-lg space-y-3 w-96 bg-blue-100 duration-300"
           >
             <h1 className="text-3xl items-center text-cyan-400 font-bold">
               Messenger
             </h1>
-
             <h2 className="text-2xl items-center text-black">
               Login with you{" "}
               <span className="text-blue-600 font-semibold">Account</span>
             </h2>
-
             {/* Email */}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -33,15 +62,14 @@ export default function Login() {
                 type="email"
                 className="grow"
                 placeholder="Email"
-                //   {...register("email", { required: true })}
+                {...register("email", { required: true })}
               />
-            </label>
-            {/* {errors.email && (
-            <span className="text-red-500 text-sm font-semibold">
-              This field is required
-            </span>
-          )} */}
-
+            </label>{" "}
+            {errors.email && (
+              <span className="text-red-500 text-sm font-semibold">
+                This field is required
+              </span>
+            )}
             {/* Password */}
             <label className="input input-bordered flex items-center gap-2">
               <svg
@@ -60,15 +88,14 @@ export default function Login() {
                 type="password"
                 className="grow"
                 placeholder="password"
-                //   {...register("password", { required: true })}
+                {...register("password", { required: true })}
               />
-            </label>
-            {/* {errors.password && (
-            <span className="text-red-500 text-sm font-semibold">
-              This field is required
-            </span>
-          )} */}
-
+            </label>{" "}
+            {errors.password && (
+              <span className="text-red-500 text-sm font-semibold">
+                This field is required
+              </span>
+            )}
             {/* Text & Button */}
             <div className="justify-center pt-3 pb-3">
               <input

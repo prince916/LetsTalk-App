@@ -7,12 +7,12 @@ import Right from "./home/right/Right";
 export default function () {
   return (
     <>
-      {/* <div className="flex h-screen overflow-auto">
+      <div className="flex h-screen overflow-auto">
         <Logout></Logout>
         <Left></Left>
         <Right></Right>
-      </div> */}
-      <Signup ></Signup>
+      </div>
+      {/* <Signup ></Signup> */}
       {/* <Login></Login> */}
     </>
   );
