@@ -1,13 +1,13 @@
-// import React, { createContext } from "react";
+import React, { createContext } from "react";
 
-// export const AuthContext = createContext();
+export const AuthContext = createContext();
 
-// function AuthProvider({children}) {
-//   return (
-//     <>
-//       <div>AuthProvider</div>
-//     </>
-//   );
-// }
+function AuthProvider({children}) {
+  return (
+    <>
+      <div>AuthProvider</div>
+    </>
+  );
+}
 
-// export default AuthProvider;
+export default AuthProvider;
