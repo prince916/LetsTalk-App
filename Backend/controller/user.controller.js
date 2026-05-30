@@ -38,8 +38,6 @@ export const signup = async (req, res) => {
   }
 };
 
-
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -69,6 +67,19 @@ export const logout = async (req, res) => {
     res.status(200).json({ message: "User Logged Out Successfully" });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const getUserProfile = async (req, res) => {
+  try {
+    const loggedInUser = req.User._id;
+    const filteredUsers = await User.find({
+      _id: { $ne: loggedInUser },
+    }).select("-password");
+    res.status(201).json({ filteredUsers });
+  } catch (error) {
+    console.log("Error in allUsers Controller: " + error);
     res.status(500).json({ message: "Server error" });
   }
 };

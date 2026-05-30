@@ -1,8 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom";
+
 
 export default function Login() {
+  const [authUser, setAuthUser] = useAuth();
   const {
     register,
     handleSubmit,
@@ -25,6 +29,7 @@ export default function Login() {
           alert("Login Successful!");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
+        setAuthUser(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -106,10 +111,13 @@ export default function Login() {
 
               <p className="text-black pt-3">
                 Don't have any Account?{" "}
-                <span className="text-blue-500 underline cursor-pointer ml-1">
-                  {" "}
-                  Signup
-                </span>
+                <Link
+                to={"/signup"}
+                className="text-blue-500 underline cursor-pointer ml-1"
+              >
+                {" "}
+                Signup
+              </Link>
               </p>
             </div>
           </form>

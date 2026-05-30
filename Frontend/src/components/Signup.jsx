@@ -1,8 +1,11 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom";
 
 export default function Signup() {
+  const [authUser, setAuthUser] = useAuth();
   const {
     register,
     handleSubmit,
@@ -33,6 +36,7 @@ export default function Signup() {
           alert("Signup Successful! You can now log in.");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
+        setAuthUser(response.data);
       })
       .catch((error) => {
         if (error.response) {
@@ -161,14 +165,14 @@ export default function Signup() {
           )}
 
           {/* Text & Button */}
-          <div className="flex justify-center pt-3 pb-3">
+          <div className="justify-center pt-3 pb-3">
             <input
               type="submit"
               value="Signup"
               className="text-white bg-blue-600 cursor-pointer w-full rounded-lg py-2"
             ></input>
 
-            {/* <p>
+            <p className="text-black pt-3">
               Have any Account?{" "}
               <Link
                 to={"/login"}
@@ -177,7 +181,7 @@ export default function Signup() {
                 {" "}
                 Login
               </Link>
-            </p> */}
+            </p>
           </div>
         </form>
       </div>
