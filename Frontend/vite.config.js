@@ -6,4 +6,13 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  server:{
+    port: 4001,
+    Proxy: {
+      '/api': {
+        target: "http://localhost:5002",
+        ChangeOrigin: true,
+      }
+    }
+  }
 })
