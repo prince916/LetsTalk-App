@@ -5,7 +5,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRoute from "./routes/user.route.js";
 
-
 const app = express();
 dotenv.config();
 
@@ -14,7 +13,7 @@ app.use(cookieParser());
 app.use(cors());
 
 
-const PORT = process.env.PORT || 5001; 
+const PORT = process.env.PORT || 5002; 
 const URI = process.env.MONGODB_URI;
 
 try {
@@ -25,7 +24,7 @@ try {
 }
 
 
-app.use("/user", userRoute);
+app.use("/api/user", userRoute);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 import { Link } from "react-router-dom";
 
-export default function Signup() {
+function Signup() {
   const [authUser, setAuthUser] = useAuth();
   const {
     register,
@@ -22,18 +22,18 @@ export default function Signup() {
 
   const onSubmit = async (data) => {
     const userInfo = {
-      name: data.name,
+      fullname: data.fullname,
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
     };
-
+    // console.log(userInfo);
     await axios
       .post("/api/user/signup", userInfo)
       .then((response) => {
         // console.log(response.data);
         if (response.data) {
-          alert("Signup Successful! You can now log in.");
+          alert("Login Successful!");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
         setAuthUser(response.data);
@@ -42,24 +42,24 @@ export default function Signup() {
         if (error.response) {
           alert("Error:" + error.response.data.message);
         }
-      }); 
+      });
   };
   return (
     <>
-      <div className="flex h-screen items-center justify-center bg-blue-100">
+      <div className="flex h-screen items-center justify-center">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="border-2 border-black  px-6 py-4 rounded-lg space-y-3 w-96 bg-blue-100 duration-300"
+          className="border border-black px-6 py-2 rounded-md space-y-3 w-96"
         >
-          <h1 className="text-3xl items-center text-cyan-400 font-bold">
+          <h1 className="text-2xl items-center text-blue-600 font-bold">
             Messenger
           </h1>
 
-          <h2 className="text-2xl items-center text-black">
+          <h2 className="text-2xl items-center">
             Create a new{" "}
             <span className="text-blue-600 font-semibold">Account</span>
           </h2>
-
+         
           {/* Fullname */}
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -74,15 +74,14 @@ export default function Signup() {
               type="text"
               className="grow"
               placeholder="Fullname"
-              {...register("name", { required: true })}
+              {...register("fullname", { required: true })}
             />
           </label>
-          {errors.name && (
+          {errors.fullname && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>
           )}
-
           {/* Email */}
           <label className="input input-bordered flex items-center gap-2">
             <svg
@@ -165,14 +164,14 @@ export default function Signup() {
           )}
 
           {/* Text & Button */}
-          <div className="justify-center pt-3 pb-3">
-            <input
-              type="submit"
-              value="Signup"
-              className="text-white bg-blue-600 cursor-pointer w-full rounded-lg py-2"
-            ></input>
-
-            <p className="text-black pt-3">
+          <div className="flex justify-center">
+              <input
+                type="submit"
+                value="Signup"
+                className="text-white bg-blue-600 cursor-pointer w-full rounded-lg py-2"
+              ></input>
+            </div>
+            <p>
               Have any Account?{" "}
               <Link
                 to={"/login"}
@@ -182,9 +181,10 @@ export default function Signup() {
                 Login
               </Link>
             </p>
-          </div>
         </form>
       </div>
     </>
   );
 }
+
+export default Signup;

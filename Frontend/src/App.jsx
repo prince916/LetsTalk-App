@@ -6,6 +6,7 @@ import Logout from "./home/left1/Logout";
 import Right from "./home/right/Right";
 import { Routes, Route, Navigate } from "react-router-dom";
 
+
 function App() {
   const [authUser, setAuthUser] = useAuth();
   console.log(authUser);
@@ -35,6 +36,7 @@ function App() {
           element={authUser ? <Navigate to={"/"} /> : <Signup />}
         />
       </Routes>
+      
     </>
   );
 }
