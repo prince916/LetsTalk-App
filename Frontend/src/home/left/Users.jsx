@@ -1,6 +1,6 @@
 import React from "react";
 import User from "./User";
-import useGetAllUsers from "../../context/useGetAllUsers.jsx";
+import useGetAllUsers from "../../context/useGetAllUsers";
 
 function Users() {
   const [allUsers, loading] = useGetAllUsers();
@@ -14,9 +14,9 @@ function Users() {
         className="py-2 flex-1 overflow-y-auto"
         style={{ maxHeight: "calc(84vh - 10vh)" }}
       >
-        {allUsers.map((user, index) => {
-          return <User key={index} user={user} />;
-        })}
+        {allUsers.map((user, index) => (
+          <User key={index} user={user} />
+        ))}
       </div>
     </div>
   );

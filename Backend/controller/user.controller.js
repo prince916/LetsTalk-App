@@ -6,6 +6,7 @@ export const signup = async (req, res) => {
   try {
     const { name, email, password, confirmPassword } = req.body;
     if (password != confirmPassword) {
+      console.log(password,confirmPassword);
       return res.status(400).json({ message: "Password do not match" });
     }
     const user = await User.findOne({ email });
@@ -73,7 +74,7 @@ export const logout = async (req, res) => {
 
 export const getUserProfile = async (req, res) => {
   try {
-    const loggedInUser = req.User._id;
+    const loggedInUser = req.user._id;
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUser },
     }).select("-password");

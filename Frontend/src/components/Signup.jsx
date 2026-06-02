@@ -22,7 +22,7 @@ function Signup() {
 
   const onSubmit = async (data) => {
     const userInfo = {
-      fullname: data.fullname,
+      name: data.name,
       email: data.email,
       password: data.password,
       confirmPassword: data.confirmPassword,
@@ -33,7 +33,7 @@ function Signup() {
       .then((response) => {
         // console.log(response.data);
         if (response.data) {
-          alert("Login Successful!");
+          alert("Signup successful! You can Login now.");
         }
         localStorage.setItem("ChatApp", JSON.stringify(response.data));
         setAuthUser(response.data);
@@ -73,11 +73,11 @@ function Signup() {
             <input
               type="text"
               className="grow"
-              placeholder="Fullname"
-              {...register("fullname", { required: true })}
+              placeholder="name"
+              {...register("name", { required: true })}
             />
           </label>
-          {errors.fullname && (
+          {errors.name && (
             <span className="text-red-500 text-sm font-semibold">
               This field is required
             </span>

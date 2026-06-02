@@ -16,7 +16,7 @@ function useGetAllUsers() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAllUsers(response.data);
+        setAllUsers(response.data.filteredUsers);
         setLoading(false);
       } catch (error) {
         console.log("Error in useGetAllUsers: " + error);
