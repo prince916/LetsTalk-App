@@ -1,3 +1,4 @@
+import Loading from "./components/Loading.jsx";
 import Login from "./components/Login.jsx";
 import Signup from "./components/Signup.jsx";
 import { useAuth } from "./context/AuthProvider.jsx";
@@ -6,12 +7,12 @@ import Logout from "./home/left1/Logout";
 import Right from "./home/right/Right";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-
 function App() {
   const [authUser, setAuthUser] = useAuth();
   console.log(authUser);
   return (
     <>
+      
       <Routes>
         <Route
           path="/"
@@ -36,7 +37,6 @@ function App() {
           element={authUser ? <Navigate to={"/"} /> : <Signup />}
         />
       </Routes>
-      
     </>
   );
 }

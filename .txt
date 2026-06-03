@@ -1,0 +1,23 @@
+******** Message Model ********
+
+Prince(sender) ----> "Hello"
+Raj(receiver) --> "Hii"
+
+_id = jhjkshj (mongoDB)
+senderID = 6a1981ccca0d9e30b7b18c51
+receiverID = 6a182e24883102db1fe47f7d
+Message = "Hello"
+
+
+_id = jhjkshjvbfgdf (mongoDB)
+senderID = 6a182e24883102db1fe47f7d
+receiverID = 6a1981ccca0d9e30b7b18c51
+Message = "Hi"
+
+
+Conversation Model 
+
+_id = hjghghahsduugf
+member[senderID, receiverID]
+Message[_id]
+

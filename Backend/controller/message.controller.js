@@ -22,16 +22,17 @@ export const sendMessage = async (req, res) => {
     if (newMessage) {
       conversation.messages.push(newMessage._id);
     }
-    // await conversation.save()
-    // await newMessage.save();
+    //     // await conversation.save()
+    //     // await newMessage.save();
     await Promise.all([conversation.save(), newMessage.save()]); // run parallel
+    res.status(201).json({ message: "Message sent successfully", newMessage });
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
     res.status(201).json(newMessage);
   } catch (error) {
-    console.log("Error in sendMessage", error);
+    console.log("Error in sendind Message" + error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -49,7 +50,7 @@ export const getMessage = async (req, res) => {
     const messages = conversation.messages;
     res.status(201).json(messages);
   } catch (error) {
-    console.log("Error in getMessage", error);
+    console.log("Error in getMessage" + error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
