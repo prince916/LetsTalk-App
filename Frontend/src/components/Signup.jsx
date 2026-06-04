@@ -74,7 +74,7 @@ function Signup() {
             <input
               type="text"
               className="grow"
-              placeholder="name"
+              placeholder="Name"
               {...register("name", { required: true })}
             />
           </label>
