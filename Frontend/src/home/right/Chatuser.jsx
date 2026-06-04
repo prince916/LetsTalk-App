@@ -1,12 +1,15 @@
 import React from "react";
 import useConversation from "../../statemanage/useConversation.js";
 import { CiMenuFries } from "react-icons/ci";
+import { useSocketContext } from "../../context/SocketContext.jsx";
 
 function Chatuser() {
   const { selectedConversation } = useConversation();
   console.log(selectedConversation);
   const { onlineUsers } = useSocketContext();
-  const isOnline = onlineUsers.includes(user._id);
+  const isOnline = selectedConversation
+    ? onlineUsers.includes(selectedConversation._id)
+    : false;
   if (!selectedConversation) {
     return (
       <div className="h-[10vh] flex items-center px-5 bg-gray-900 text-white">
@@ -30,8 +33,8 @@ function Chatuser() {
         <div>
           <h1 className="text-xl">{selectedConversation.name}</h1>
           <span className="text-sm">
-            Online
-            {/* {getOnlineUsersStatus(selectedConversation._id)} */}
+            {/* Online */}
+            {getOnlineUsersStatus(selectedConversation._id)}
           </span>
         </div>
       </div>
