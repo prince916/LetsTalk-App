@@ -25,7 +25,6 @@ io.on("connection", (socket) => {
   const userId = socket.handshake.query.userId;
   if (userId) {
     users[userId] = socket.id;
-    
     console.log("Hello ", users);
   }
   // used to send the events to all connected users
