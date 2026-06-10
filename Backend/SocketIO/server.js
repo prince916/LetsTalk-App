@@ -23,7 +23,7 @@ const users = {};
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
   const userId = socket.handshake.query.userId;
-  if (userId) {
+  if (userId && userId !== "undefined" && userId !== "null") {
     users[userId] = socket.id;
     console.log("Online Users:", users);
   }
@@ -32,8 +32,10 @@ io.on("connection", (socket) => {
 
   // used to listen client side events emitted by server side (server & client)
   socket.on("disconnect", () => {
-    console.log("a user disconnected", socket.id);
-    delete users[userId];
+    if (users) {
+      console.log("a user disconnected", socket.id);
+      delete users[userId];
+    }
     io.emit("getOnlineUsers", Object.keys(users));
   });
 });

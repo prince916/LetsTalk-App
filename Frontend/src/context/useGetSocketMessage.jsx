@@ -7,10 +7,13 @@ const useGetSocketMessage = () => {
   const { messages, setMessage } = useConversation();
 
   useEffect(() => {
-    socket.on("newMessage", (newMessage) => {
+    socket.on("newMessage", (newMessage) => { 
       const notification = new Audio(sound);
-      notification.play();
-      setMessage((messages) => [...messages, newMessage]);
+      // console.log(sound);
+      notification.play().catch((err) => {
+        console.log("Audio error:", err);
+      });
+      setMessage((prev) => [...prev, newMessage]);
     });
     return () => {
       socket?.off("newMessage");
