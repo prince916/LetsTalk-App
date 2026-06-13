@@ -22,7 +22,7 @@ export const sendMessage = async (req, res) => {
     if (newMessage) {
       conversation.messages.push(newMessage._id);
     }
-    // await conversation.save()
+    await conversation.save();
     // await newMessage.save();
     await Promise.all([conversation.save(), newMessage.save()]); // run parallel
     const receiverSocketId = getReceiverSocketId(receiverId);
@@ -42,7 +42,12 @@ export const getMessage = async (req, res) => {
     const senderId = req.user._id; // current logged in user
     let conversation = await Conversation.findOne({
       members: { $all: [senderId, chatUser] },
-    }).populate("messages");
+    }).populate({
+      path: "messages",
+      options: {
+        sort: { createdAt: 1 },
+      },
+    });
     if (!conversation) {
       return res.status(201).json([]);
     }

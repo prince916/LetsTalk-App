@@ -10,11 +10,25 @@ const messageSchema = new mongoose.Schema(
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      default: null, // null for group messages
+    },
+    groupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+      default: null, // null for direct messages
+    },
+    conversationId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Conversation",
     },
     message: {
       type: String,
       required: true,
+    },
+    messageType: {
+      type: String,
+      enum: ["text", "image", "system"],
+      default: "text",
     },
   },
   { timestamps: true }

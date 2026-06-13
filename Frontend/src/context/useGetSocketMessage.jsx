@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSocketContext } from "./SocketContext.jsx";
+import { useSocketContext } from "./SocketContext";
 import useConversation from "../statemanage/useConversation.js";
 import sound from "../assets/notification.mp3";
 const useGetSocketMessage = () => {
@@ -7,16 +7,13 @@ const useGetSocketMessage = () => {
   const { messages, setMessage } = useConversation();
 
   useEffect(() => {
-    socket.on("newMessage", (newMessage) => { 
+    socket.on("newMessage", (newMessage) => {
       const notification = new Audio(sound);
-      // console.log(sound);
-      notification.play().catch((err) => {
-        console.log("Audio error:", err);
-      });
-      setMessage((prev) => [...prev, newMessage]);
+      notification.play();
+      setMessage([...messages, newMessage]);
     });
     return () => {
-      socket?.off("newMessage");
+      socket.off("newMessage");
     };
   }, [socket, messages, setMessage]);
 };

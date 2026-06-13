@@ -1,18 +1,29 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
 import Message from "./message.model.js";
+
 const conversationSchema = new mongoose.Schema(
   {
+    type: {
+      type: String,
+      enum: ["direct", "group"],
+      default: "direct",
+    },
     members: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: User,
+        ref: "User",
       },
     ],
+    groupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Group",
+      default: null, // null for direct conversations
+    },
     messages: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Message,
+        ref: "Message",
         default: [],
       },
     ],
