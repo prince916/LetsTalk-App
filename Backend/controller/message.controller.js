@@ -1,6 +1,8 @@
 import { getReceiverSocketId, io } from "../SocketIO/server.js";
 import Conversation from "../models/conversation.model.js";
 import Message from "../models/message.model.js";
+import Group from "../models/group.model.js";
+
 export const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
@@ -32,6 +34,76 @@ export const sendMessage = async (req, res) => {
     res.status(201).json(newMessage);
   } catch (error) {
     console.log("Error in sendMessage", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// Send group message
+export const sendGroupMessage = async (req, res) => {
+  try {
+    const { message } = req.body;
+    const { groupId } = req.params;
+    const senderId = req.user._id;
+
+    // Verify user is member of group
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    const isMember = group.members.some(
+      (m) => m.userId.toString() === senderId.toString()
+    );
+    if (!isMember) {
+      return res.status(403).json({ error: "You are not a member of this group" });
+    }
+
+    if (!message || message.trim() === "") {
+      return res.status(400).json({ error: "Message cannot be empty" });
+    }
+
+    // Create message
+    const newMessage = new Message({
+      senderId,
+      groupId,
+      message: message.trim(),
+      messageType: "text",
+    });
+
+    await newMessage.save();
+
+    // Add to group conversation
+    let conversation = await Conversation.findOne({ groupId });
+    if (!conversation) {
+      conversation = await Conversation.create({
+        type: "group",
+        groupId,
+        members: group.members.map((m) => m.userId),
+        messages: [],
+      });
+    }
+
+    conversation.messages.push(newMessage._id);
+    await conversation.save();
+
+    // Populate sender details
+    const populatedMessage = await Message.findById(newMessage._id).populate(
+      "senderId",
+      "name email"
+    );
+
+    // Emit to all group members
+    io.to(`group_${groupId}`).emit("newGroupMessage", {
+      message: populatedMessage,
+      groupId,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: populatedMessage,
+    });
+  } catch (error) {
+    console.log("Error in sendGroupMessage:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

@@ -7,6 +7,8 @@ const useGetSocketMessage = () => {
   const { messages, setMessage } = useConversation();
 
   useEffect(() => {
+    if (!socket) return;
+
     socket.on("newMessage", (newMessage) => {
       const notification = new Audio(sound);
       notification.play();

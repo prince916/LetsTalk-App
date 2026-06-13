@@ -6,5 +6,14 @@ const useConversation = create((set) => ({
     set({ selectedConversation }),
   messages: [],
   setMessage: (messages) => set({ messages }),
+  // Group conversation support
+  selectedGroup: null,
+  setSelectedGroup: (selectedGroup) => set({ selectedGroup }),
+  groupMessages: [],
+  setGroupMessages: (groupMessages) => set({ groupMessages }),
+  addGroupMessage: (message) =>
+    set((state) => ({
+      groupMessages: [...state.groupMessages, message],
+    })),
 }));
 export default useConversation;

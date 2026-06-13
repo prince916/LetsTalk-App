@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import userRoute from "./routes/user.route.js";
 import messageRoute from "./routes/message.route.js";
+import groupRoute from "./routes/group.route.js";
 import { app, server } from "./SocketIO/server.js";
 
 dotenv.config();
@@ -27,6 +28,7 @@ try {
 
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
+app.use("/api/group", groupRoute);
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

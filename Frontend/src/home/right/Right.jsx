@@ -2,15 +2,25 @@ import React, { useEffect } from "react";
 import Chatuser from "./Chatuser.jsx";
 import Messages from "./Messages.jsx";
 import Type from "./Type.jsx";
+import GroupChatInterface from "../../components/GroupChatInterface.jsx";
 import useConversation from "../../statemanage/useConversation.js";
+import useGroup from "../../statemanage/useGroup.js";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { CiMenuFries } from "react-icons/ci";
 
 function Right() {
   const { selectedConversation, setSelectedConversation } = useConversation();
+  const { selectedGroup } = useGroup();
+
   useEffect(() => {
     return setSelectedConversation(null);
   }, [setSelectedConversation]);
+
+  // If a group is selected, show group chat interface
+  if (selectedGroup) {
+    return <GroupChatInterface />;
+  }
+
   return (
     <div className="w-full bg-slate-900 text-gray-300">
       <div>
@@ -37,7 +47,6 @@ export default Right;
 
 const NoChatSelected = () => {
   const [authUser] = useAuth();
-  console.log(authUser);
   return (
     <>
       <div className="relative">
@@ -55,7 +64,7 @@ const NoChatSelected = () => {
             </span>
             <br />
             No chat selected, please start conversation by selecting anyone to
-            your contacts
+            your contacts or a group
           </h1>
         </div>
       </div>
