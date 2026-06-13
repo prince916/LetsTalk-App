@@ -17,6 +17,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
 
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);

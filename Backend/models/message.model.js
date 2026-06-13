@@ -23,7 +23,26 @@ const messageSchema = new mongoose.Schema(
     },
     message: {
       type: String,
-      required: true,
+      default: "",
+      required: function () {
+        return this.messageType !== "image";
+      },
+    },
+    imageUrl: {
+      type: String,
+      default: null,
+    },
+    imageName: {
+      type: String,
+      default: null,
+    },
+    imageSize: {
+      type: Number,
+      default: null,
+    },
+    imageMimeType: {
+      type: String,
+      default: null,
     },
     messageType: {
       type: String,

@@ -17,7 +17,20 @@ function Message({ message }) {
       <div className="p-4">
         <div className={`chat ${chatName}`}>
           <div className={`chat-bubble text-white ${chatColor}`}>
-            {message.message}
+            {message.messageType === "image" && message.imageUrl ? (
+              <div className="space-y-2">
+                <a href={message.imageUrl} target="_blank" rel="noreferrer">
+                  <img
+                    src={message.imageUrl}
+                    alt={message.message || "Sent image"}
+                    className="max-h-72 max-w-xs rounded-lg object-cover"
+                  />
+                </a>
+                {message.message && <p>{message.message}</p>}
+              </div>
+            ) : (
+              message.message
+            )}
           </div>
           <div className="chat-footer">{formattedTime}</div>
         </div>

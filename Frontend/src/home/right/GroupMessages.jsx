@@ -29,7 +29,20 @@ function GroupMessage({ message, isMe }) {
         </div>
         <div className={`chat-bubble text-white ${chatColor}`}>
           <div className="text-xs font-semibold">{message.senderId.name}</div>
-          {message.message}
+          {message.messageType === "image" && message.imageUrl ? (
+            <div className="mt-1 space-y-2">
+              <a href={message.imageUrl} target="_blank" rel="noreferrer">
+                <img
+                  src={message.imageUrl}
+                  alt={message.message || "Sent image"}
+                  className="max-h-72 max-w-xs rounded-lg object-cover"
+                />
+              </a>
+              {message.message && <p>{message.message}</p>}
+            </div>
+          ) : (
+            message.message
+          )}
         </div>
         <div className="chat-footer text-xs opacity-50">{formattedTime}</div>
       </div>

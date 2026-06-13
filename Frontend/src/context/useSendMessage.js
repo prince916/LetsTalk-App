@@ -18,7 +18,27 @@ const useSendMessage = () => {
       setLoading(false);
     }
   };
-  return { loading, sendMessages };
+
+  const sendImageMessage = async (file, message = "") => {
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("image", file);
+      formData.append("message", message);
+
+      const res = await axios.post(
+        `/api/message/send-image/${selectedConversation._id}`,
+        formData
+      );
+      setMessage([...messages, res.data]);
+    } catch (error) {
+      console.log("Error in send image message", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { loading, sendMessages, sendImageMessage };
 };
 
 export default useSendMessage;
