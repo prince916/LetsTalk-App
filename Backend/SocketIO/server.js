@@ -116,6 +116,61 @@ io.on("connection", (socket) => {
 
   // ========== DIRECT MESSAGE SOCKET EVENTS ==========
 
+  // ========== VIDEO CALL SIGNALING EVENTS ==========
+
+  socket.on("callUser", ({ to, from, fromName, offer }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (!receiverSocketId) {
+      socket.emit("callUnavailable");
+      return;
+    }
+
+    io.to(receiverSocketId).emit("incomingCall", {
+      from,
+      fromName,
+      offer,
+    });
+  });
+
+  socket.on("answerCall", ({ to, from, answer }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("callAnswered", {
+        from,
+        answer,
+      });
+    }
+  });
+
+  socket.on("iceCandidate", ({ to, candidate }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("iceCandidate", {
+        from: userId,
+        candidate,
+      });
+    }
+  });
+
+  socket.on("rejectCall", ({ to, reason }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("callRejected", {
+        from: userId,
+        reason,
+      });
+    }
+  });
+
+  socket.on("endCall", ({ to }) => {
+    const receiverSocketId = getReceiverSocketId(to);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("callEnded", {
+        from: userId,
+      });
+    }
+  });
+
   // used to listen client side events emitted by server side (server & client)
   socket.on("disconnect", () => {
     if (users) {

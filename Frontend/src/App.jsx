@@ -7,6 +7,8 @@ import Logout from "./home/left1/Logout";
 import Right from "./home/right/Right";
 import toast, { Toaster } from "react-hot-toast";
 import { Routes, Route, Navigate } from "react-router-dom";
+import IncomingCallModal from "./components/IncomingCallModal.jsx";
+import VideoCallModal from "./components/VideoCallModal.jsx";
 
 function App() {
   const [authUser, setAuthUser] = useAuth();
@@ -39,6 +41,8 @@ function App() {
           element={authUser ? <Navigate to={"/"} /> : <Signup />}
         />
       </Routes>
+      <IncomingCallModal />
+      <VideoCallModal />
       <Toaster />
     </>
   );

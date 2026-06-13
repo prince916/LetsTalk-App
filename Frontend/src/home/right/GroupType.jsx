@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { IoSend } from "react-icons/io5";
+import { BsEmojiSmile } from "react-icons/bs";
+import EmojiPicker from "emoji-picker-react";
 import useSendGroupMessage from "../../context/useSendGroupMessage.js";
 import useGroupSocket from "../../context/useGroupSocket.js";
 import useGroup from "../../statemanage/useGroup.js";
@@ -7,6 +9,7 @@ import { useAuth } from "../../context/AuthProvider.jsx";
 
 function GroupType() {
   const [message, setMessage] = useState("");
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { loading, sendGroupMessage } = useSendGroupMessage();
   const { sendTypingIndicator, stopTypingIndicator } = useGroupSocket();
   const { selectedGroup } = useGroup();
@@ -34,12 +37,21 @@ function GroupType() {
     }
   };
 
+  const handleEmojiClick = (emojiData) => {
+    setMessage((prev) => prev + emojiData.emoji);
+
+    if (selectedGroup?._id) {
+      sendTypingIndicator(selectedGroup._id, authUser?.user?.name);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!message.trim()) return;
 
     await sendGroupMessage(message);
     setMessage("");
+    setShowEmojiPicker(false);
 
     // Stop typing indicator
     if (selectedGroup?._id) {
@@ -59,9 +71,27 @@ function GroupType() {
   }, [typingTimeout]);
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="relative">
+      {showEmojiPicker && (
+        <div className="absolute bottom-[8vh] left-4 z-50">
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+            theme="dark"
+            width={320}
+            height={400}
+          />
+        </div>
+      )}
       <div className="flex space-x-1 h-[8vh] bg-gray-800">
-        <div className="w-[70%] mx-4">
+        <button
+          type="button"
+          onClick={() => setShowEmojiPicker((prev) => !prev)}
+          className="btn btn-ghost text-2xl ml-2 mt-1"
+          aria-label="Choose emoji"
+        >
+          <BsEmojiSmile />
+        </button>
+        <div className="w-[70%] mx-2">
           <input
             type="text"
             placeholder="Type a message..."
