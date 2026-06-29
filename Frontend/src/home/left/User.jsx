@@ -1,18 +1,25 @@
 import React from "react";
 import useConversation from "../../statemanage/useConversation.js";
 import { useSocketContext } from "../../context/SocketContext.jsx";
+import { useMobileView } from "../../App.jsx";
 
 function User({ user }) {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const isSelected = selectedConversation?._id === user._id;
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(user._id);
+  const { setMobileView } = useMobileView() || {};
+
+  const handleSelect = () => {
+    setSelectedConversation(user);
+    setMobileView?.("chat");
+  };
   return (
     <div
       className={`hover:bg-slate-600 duration-300 ${
         isSelected ? "bg-slate-700" : ""
       }`}
-      onClick={() => setSelectedConversation(user)}
+      onClick={handleSelect}
     >
       <div className="flex space-x-4 px-8 py-3 hover:bg-slate-700 duration-300 cursor-pointer">
         <div className={`avatar ${isOnline ? "avatar-online" : "avatar-offline"}`}>

@@ -2,6 +2,7 @@ import React from "react";
 import useGroup from "../../statemanage/useGroup.js";
 import { useGroupContext } from "../../context/GroupContext.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
+import { useMobileView } from "../../App.jsx";
 
 function GroupItem({ group }) {
   const { selectedGroup: stateSelectedGroup, setSelectedGroup: setStateSelectedGroup } = useGroup();
@@ -13,9 +14,12 @@ function GroupItem({ group }) {
   const isCreator = group.createdBy?._id === authUser?.user?._id || 
                     group.createdBy === authUser?.user?._id;
 
+  const { setMobileView } = useMobileView() || {};
+
   const handleSelectGroup = () => {
     setSelectedGroup(group);
     setStateSelectedGroup(group);
+    setMobileView?.("chat");
   };
 
   return (

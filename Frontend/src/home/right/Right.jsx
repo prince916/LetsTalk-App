@@ -6,11 +6,12 @@ import GroupChatInterface from "../../components/GroupChatInterface.jsx";
 import useConversation from "../../statemanage/useConversation.js";
 import useGroup from "../../statemanage/useGroup.js";
 import { useAuth } from "../../context/AuthProvider.jsx";
-import { CiMenuFries } from "react-icons/ci";
+import { useMobileView } from "../../App.jsx";
 
 function Right() {
   const { selectedConversation, setSelectedConversation } = useConversation();
   const { selectedGroup } = useGroup();
+  const { setMobileView } = useMobileView() || {};
 
   useEffect(() => {
     return setSelectedConversation(null);
@@ -22,23 +23,18 @@ function Right() {
   }
 
   return (
-    <div className="w-full bg-slate-900 text-gray-300">
-      <div>
-        {!selectedConversation ? (
-          <NoChatSelected />
-        ) : (
-          <>
-            <Chatuser />
-            <div
-              className=" flex-1 overflow-y-auto"
-              style={{ maxHeight: "calc(88vh - 8vh)" }}
-            >
-              <Messages />
-            </div>
-            <Type />
-          </>
-        )}
-      </div>
+    <div className="w-full flex flex-col bg-slate-900 text-gray-300 h-screen">
+      {!selectedConversation ? (
+        <NoChatSelected />
+      ) : (
+        <>
+          <Chatuser />
+          <div className="flex-1 overflow-y-auto">
+            <Messages />
+          </div>
+          <Type />
+        </>
+      )}
     </div>
   );
 }
@@ -47,27 +43,33 @@ export default Right;
 
 const NoChatSelected = () => {
   const [authUser] = useAuth();
+  const { setMobileView } = useMobileView() || {};
+
   return (
-    <>
-      <div className="relative">
-        <label
-          htmlFor="my-drawer-2"
-          className="btn btn-ghost drawer-button lg:hidden absolute left-5"
+    <div className="flex flex-col h-full">
+      {/* Mobile back button */}
+      <div className="md:hidden flex items-center p-3 bg-slate-800">
+        <button
+          onClick={() => setMobileView?.("list")}
+          className="btn btn-ghost btn-sm text-white flex items-center gap-1"
         >
-          <CiMenuFries className="text-white text-xl" />
-        </label>
-        <div className="flex h-screen items-center justify-center">
-          <h1 className="text-center">
-            Welcome{" "}
-            <span className="font-semibold text-xl">
-              {authUser.user.name}
-            </span>
-            <br />
-            No chat selected, please start conversation by selecting anyone to
-            your contacts or a group
-          </h1>
-        </div>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+          </svg>
+          Back
+        </button>
       </div>
-    </>
+      <div className="flex flex-1 items-center justify-center">
+        <h1 className="text-center px-4">
+          Welcome{" "}
+          <span className="font-semibold text-xl">
+            {authUser.user.name}
+          </span>
+          <br />
+          No chat selected, please start conversation by selecting anyone from
+          your contacts or a group
+        </h1>
+      </div>
+    </div>
   );
 };

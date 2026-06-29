@@ -2,9 +2,19 @@
 @plugin "daisyui";
 
 :root {
-  font-family: system-ui, Helvetica , Arial, sans-serif;
+  font-family: system-ui, Helvetica, Arial, sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
 }
 
 .flex-prince ::-webkit-scrollbar {
   display: none;
+}
+
+/* Smooth scrollable areas on touch devices */
+.overflow-y-auto {
+  -webkit-overflow-scrolling: touch;
 }

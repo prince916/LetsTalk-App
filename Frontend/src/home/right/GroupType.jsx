@@ -99,19 +99,19 @@ function GroupType() {
   }, [typingTimeout, imagePreview]);
 
   return (
-    <form onSubmit={handleSubmit} className="relative">
+    <form onSubmit={handleSubmit} className="relative flex-shrink-0">
       {showEmojiPicker && (
-        <div className="absolute bottom-[8vh] left-4 z-50">
+        <div className="absolute bottom-full left-2 z-50 mb-1">
           <EmojiPicker
             onEmojiClick={handleEmojiClick}
             theme="dark"
-            width={320}
-            height={400}
+            width={Math.min(320, window.innerWidth - 20)}
+            height={350}
           />
         </div>
       )}
       {imagePreview && (
-        <div className="absolute bottom-[8vh] left-4 z-40 w-52 rounded-lg border border-slate-700 bg-slate-900 p-2 shadow-xl">
+        <div className="absolute bottom-full left-4 z-40 w-44 md:w-52 rounded-lg border border-slate-700 bg-slate-900 p-2 shadow-xl mb-1">
           <button
             type="button"
             onClick={clearSelectedImage}
@@ -123,18 +123,18 @@ function GroupType() {
           <img
             src={imagePreview}
             alt="Selected preview"
-            className="max-h-40 w-full rounded object-cover"
+            className="max-h-32 md:max-h-40 w-full rounded object-cover"
           />
           <p className="mt-2 truncate text-xs text-slate-300">
             {selectedImage?.name}
           </p>
         </div>
       )}
-      <div className="flex space-x-1 h-[8vh] bg-gray-800">
+      <div className="flex items-center gap-1 min-h-[3.5rem] bg-gray-800 px-1 py-1">
         <button
           type="button"
           onClick={() => setShowEmojiPicker((prev) => !prev)}
-          className="btn btn-ghost text-2xl ml-2 mt-1"
+          className="btn btn-ghost text-xl md:text-2xl"
           aria-label="Choose emoji"
         >
           <BsEmojiSmile />
@@ -142,7 +142,7 @@ function GroupType() {
         <button
           type="button"
           onClick={() => fileInputRef.current?.click()}
-          className="btn btn-ghost text-2xl mt-1"
+          className="btn btn-ghost text-xl md:text-2xl"
           aria-label="Attach image"
         >
           <MdImage />
@@ -154,19 +154,17 @@ function GroupType() {
           onChange={handleImageChange}
           className="hidden"
         />
-        <div className="w-[70%] mx-2">
-          <input
-            type="text"
-            placeholder={selectedImage ? "Add a caption..." : "Type a message..."}
-            value={message}
-            onChange={handleInputChange}
-            className="border-gray-700 flex items-center w-full py-3 px-3 rounded-xl grow outline-none bg-slate-900 mt-1"
-          />
-        </div>
+        <input
+          type="text"
+          placeholder={selectedImage ? "Add a caption..." : "Type a message..."}
+          value={message}
+          onChange={handleInputChange}
+          className="flex-1 min-w-0 py-2 px-3 rounded-xl outline-none bg-slate-900 text-sm md:text-base"
+        />
         <button
           type="submit"
           disabled={loading}
-          className="btn btn-ghost text-2xl"
+          className="btn btn-ghost text-xl md:text-2xl"
         >
           {loading ? (
             <span className="loading loading-spinner"></span>

@@ -7,6 +7,7 @@ import GroupMessages from "../home/right/GroupMessages.jsx";
 import GroupType from "../home/right/GroupType.jsx";
 import GroupMembers from "./GroupMembers.jsx";
 import GroupSettings from "./GroupSettings.jsx";
+import { useMobileView } from "../App.jsx";
 
 function GroupChatInterface() {
   const { selectedGroup } = useGroupContext();
@@ -32,15 +33,29 @@ function GroupChatInterface() {
     );
   }
 
+  const { setMobileView } = useMobileView() || {};
+
   return (
     <div className="w-full bg-slate-900 text-gray-300 flex flex-col h-screen">
       {/* Header */}
-      <div className="bg-slate-800 p-4 border-b border-slate-700 flex items-center justify-between">
-        <div>
-          <h2 className="text-lg font-bold">{selectedGroup.name}</h2>
-          <p className="text-xs text-gray-400">
-            {selectedGroup.members?.length || 0} members
-          </p>
+      <div className="bg-slate-800 p-3 md:p-4 border-b border-slate-700 flex items-center justify-between flex-shrink-0">
+        <div className="flex items-center gap-2">
+          {/* Mobile back button */}
+          <button
+            className="md:hidden btn btn-ghost btn-sm p-1"
+            onClick={() => setMobileView?.("list")}
+            aria-label="Back to contacts"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div>
+            <h2 className="text-base md:text-lg font-bold">{selectedGroup.name}</h2>
+            <p className="text-xs text-gray-400">
+              {selectedGroup.members?.length || 0} members
+            </p>
+          </div>
         </div>
         <div className="tabs">
           <button
@@ -80,7 +95,7 @@ function GroupChatInterface() {
         {tab === "members" && <GroupMembers />}
 
         {tab === "settings" && (
-          <div className="p-4 overflow-y-auto" style={{ maxHeight: "calc(92vh - 8vh)" }}>
+          <div className="p-4 overflow-y-auto h-full">
             <GroupSettings />
           </div>
         )}

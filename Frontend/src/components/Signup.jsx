@@ -47,10 +47,10 @@ function Signup() {
   };
   return (
     <>
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex min-h-screen items-center justify-center px-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="border border-black px-6 py-2 rounded-md space-y-3 w-96"
+          className="border border-black px-6 py-4 rounded-md space-y-3 w-full max-w-sm"
         >
           <h1 className="text-2xl items-center text-blue-600 font-bold">
             Messenger

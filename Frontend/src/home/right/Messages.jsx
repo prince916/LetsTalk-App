@@ -3,9 +3,10 @@ import Message from "./Message";
 import useGetMessage from "../../context/useGetMessage.js";
 import Loading from "../../components/Loading.jsx";
 import useGetSocketMessage from "../../context/useGetSocketMessage.jsx";
+
 function Messages() {
   const { loading, messages } = useGetMessage();
-  useGetSocketMessage(); // listing incoming messages
+  useGetSocketMessage(); // listening incoming messages
   console.log(messages);
 
   const lastMsgRef = useRef();
@@ -18,11 +19,9 @@ function Messages() {
       }
     }, 100);
   }, [messages]);
+
   return (
-    <div
-      className="flex-1 overflow-y-auto"
-      style={{ minHeight: "calc(92vh - 8vh)" }}
-    >
+    <div className="flex flex-col h-full overflow-y-auto p-2">
       {loading ? (
         <Loading />
       ) : (
@@ -35,10 +34,8 @@ function Messages() {
       )}
 
       {!loading && messages.length === 0 && (
-        <div>
-          <p className="text-center mt-[20%]">
-            Say! Hi to start the conversation
-          </p>
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-center">Say! Hi to start the conversation</p>
         </div>
       )}
     </div>

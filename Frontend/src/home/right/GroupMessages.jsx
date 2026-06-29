@@ -35,7 +35,7 @@ function GroupMessage({ message, isMe }) {
                 <img
                   src={message.imageUrl}
                   alt={message.message || "Sent image"}
-                  className="max-h-72 max-w-xs rounded-lg object-cover"
+                  className="max-h-48 md:max-h-72 max-w-[200px] md:max-w-xs rounded-lg object-cover"
                 />
               </a>
               {message.message && <p>{message.message}</p>}
@@ -64,10 +64,7 @@ function GroupMessages() {
   }, [groupMessages]);
 
   return (
-    <div
-      className="flex-1 overflow-y-auto"
-      style={{ minHeight: "calc(92vh - 8vh)" }}
-    >
+    <div className="flex-1 overflow-y-auto">
       {loading ? (
         <Loading />
       ) : groupMessages.length > 0 ? (
@@ -80,8 +77,8 @@ function GroupMessages() {
           </div>
         ))
       ) : (
-        <div>
-          <p className="text-center mt-[20%]">
+        <div className="flex flex-1 items-center justify-center h-full">
+          <p className="text-center">
             No messages yet. Start the conversation!
           </p>
         </div>

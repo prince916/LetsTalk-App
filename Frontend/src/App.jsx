@@ -9,9 +9,16 @@ import toast, { Toaster } from "react-hot-toast";
 import { Routes, Route, Navigate } from "react-router-dom";
 import IncomingCallModal from "./components/IncomingCallModal.jsx";
 import VideoCallModal from "./components/VideoCallModal.jsx";
+import { createContext, useContext, useState } from "react";
+
+// Mobile view context: controls whether the list or chat is visible on small screens
+export const MobileViewContext = createContext(null);
+export const useMobileView = () => useContext(MobileViewContext);
 
 function App() {
   const [authUser, setAuthUser] = useAuth();
+  // "list" = show contacts sidebar; "chat" = show chat panel
+  const [mobileView, setMobileView] = useState("list");
   console.log(authUser);
   return (
     <>
@@ -20,13 +27,43 @@ function App() {
           path="/"
           element={
             authUser ? (
-              <div className="flex h-screen overflow-auto">
-                <Logout></Logout>
-                <Left></Left>
-                <Right></Right>
+              <MobileViewContext.Provider value={{ mobileView, setMobileView }}>
+                <div className="flex h-screen overflow-hidden">
+                  {/* Icon sidebar — always visible */}
+                  <Logout />
 
-                
-              </div>
+                  {/* Contacts list — hidden on mobile when chat is open */}
+                  <div
+                    className={`
+                      ${
+                        mobileView === "list"
+                          ? "flex"
+                          : "hidden"
+                      }
+                      md:flex
+                      w-full md:w-[30%] lg:w-[27%]
+                      flex-shrink-0
+                    `}
+                  >
+                    <Left />
+                  </div>
+
+                  {/* Chat panel — hidden on mobile when list is shown */}
+                  <div
+                    className={`
+                      ${
+                        mobileView === "chat"
+                          ? "flex"
+                          : "hidden"
+                      }
+                      md:flex
+                      flex-1 min-w-0
+                    `}
+                  >
+                    <Right />
+                  </div>
+                </div>
+              </MobileViewContext.Provider>
             ) : (
               <Navigate to={"/login"} />
             )

@@ -9,8 +9,8 @@ function Left() {
   const [tab, setTab] = useState("users"); // "users" or "groups"
 
   return (
-    <div className="w-[30%] bg-black text-gray-300 flex flex-col h-screen">
-      <h1 className="font-bold text-3xl p-2 px-11">Chats</h1>
+    <div className="w-full bg-black text-gray-300 flex flex-col h-screen">
+      <h1 className="font-bold text-2xl md:text-3xl p-2 px-4 md:px-11">Chats</h1>
 
       {/* Tab Navigation */}
       <div className="flex items-center justify-between px-4 py-2">
@@ -41,10 +41,7 @@ function Left() {
       </div>
 
       <Search />
-      <div
-        className="flex-1 overflow-y-auto"
-        style={{ minHeight: "calc(84vh - 10vh)" }}
-      >
+      <div className="flex-1 overflow-y-auto">
         {tab === "users" ? <Users /> : <Groups />}
       </div>
 
