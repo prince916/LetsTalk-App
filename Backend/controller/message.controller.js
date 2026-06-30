@@ -39,7 +39,8 @@ export const sendMessage = async (req, res) => {
 };
 
 const getUploadedImagePayload = (file) => ({
-  imageUrl: `/uploads/messages/${file.filename}`,
+  // With Cloudinary storage, `file.path` is the full CDN URL
+  imageUrl: file.path,
   imageName: file.originalname,
   imageSize: file.size,
   imageMimeType: file.mimetype,
