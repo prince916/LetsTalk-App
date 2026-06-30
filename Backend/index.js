@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
+import path from "path";
 import cors from "cors";
 import userRoute from "./routes/user.route.js";
 import messageRoute from "./routes/message.route.js";
@@ -36,12 +37,12 @@ app.use("/api/group", groupRoute);
 
 
 // ------------ Code For Deployment -----------------
-// if (process.env.NODE_ENV === "production") {
-//   app.use(express.static("./Frontend/dist"));
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.resolve(dirPath, "./Frontend/dist", "index.html"));
-//   });
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("./Frontend/dist"));
+  app.get("/",(req, res) => {
+    res.sendFile(path.resolve(dirPath, "./Frontend/dist", "index.html"));
+  });
+}
 
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
