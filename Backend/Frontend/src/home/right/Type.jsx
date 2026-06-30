@@ -56,7 +56,7 @@ function Typesend() {
   }, [imagePreview]);
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex-shrink-0">
+    <form onSubmit={handleSubmit} className="relative shrink-0">
       {showEmojiPicker && (
         <div className="absolute bottom-full left-2 z-50 mb-1">
           <EmojiPicker

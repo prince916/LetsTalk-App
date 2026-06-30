@@ -42,7 +42,7 @@ function App() {
                       }
                       md:flex
                       w-full md:w-[30%] lg:w-[27%]
-                      flex-shrink-0
+                      shrink-0
                     `}
                   >
                     <Left />
