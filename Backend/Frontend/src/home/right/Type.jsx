@@ -87,7 +87,7 @@ function Typesend() {
           </p>
         </div>
       )}
-      <div className="flex items-center gap-1 min-h-[3.5rem] bg-gray-800 px-1 py-1">
+      <div className="flex items-center gap-1 min-h-14 bg-gray-800 px-1 py-1">
         <button
           type="button"
           onClick={() => setShowEmojiPicker((prev) => !prev)}

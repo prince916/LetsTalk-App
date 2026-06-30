@@ -22,7 +22,7 @@ function Logout() {
   };
   return (
     <>
-      <div className="w-10 md:w-[4%] min-w-10 bg-slate-950 text-white flex flex-col justify-end flex-shrink-0">
+      <div className="w-10 md:w-[4%] min-w-10 bg-slate-950 text-white flex flex-col justify-end shrink-0">
         <div className="p-1 md:p-3 align-bottom">
           <button>
             <TbLogout2
