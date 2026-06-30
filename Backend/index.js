@@ -34,6 +34,15 @@ app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 app.use("/api/group", groupRoute);
 
+
+// ------------ Code For Deployment -----------------
+// if (process.env.NODE_ENV === "production") {
+//   app.use(express.static("./Frontend/dist"));
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(dirPath, "./Frontend/dist", "index.html"));
+//   });
+// }
+
 server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
