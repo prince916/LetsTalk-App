@@ -21,7 +21,7 @@ function Login() {
     };
 
     axios
-      .post("/api/user/login", userInfo)
+      .post(`${import.meta.env.VITE_API_URL}/api/user/login`, userInfo)
       .then((response) => {
         if (response.data) {
           toast.success("Login successful");
