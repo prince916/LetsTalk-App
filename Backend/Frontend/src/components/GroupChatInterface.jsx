@@ -36,7 +36,7 @@ function GroupChatInterface() {
   const { setMobileView } = useMobileView() || {};
 
   return (
-    <div className="w-full bg-slate-900 text-gray-300 flex flex-col h-screen">
+    <div className="w-full bg-slate-900 text-gray-300 flex flex-col h-dvh min-h-dvh">
       {/* Header */}
       <div className="bg-slate-800 p-3 md:p-4 border-b border-slate-700 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-2">

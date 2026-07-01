@@ -9,7 +9,7 @@ function Left() {
   const [tab, setTab] = useState("users"); // "users" or "groups"
 
   return (
-    <div className="w-full bg-black text-gray-300 flex flex-col h-screen">
+    <div className="w-full bg-black text-gray-300 flex flex-col h-dvh min-h-dvh">
       <h1 className="font-bold text-2xl md:text-3xl p-2 px-4 md:px-11">Chats</h1>
 
       {/* Tab Navigation */}

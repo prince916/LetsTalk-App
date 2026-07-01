@@ -7,7 +7,19 @@
 
 html, body, #root {
   height: 100%;
+  min-height: 100%;
   overflow: hidden;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+@supports (height: 100dvh) {
+  html, body, #root {
+    min-height: 100dvh;
+    height: 100dvh;
+  }
 }
 
 .flex-prince ::-webkit-scrollbar {

@@ -28,7 +28,7 @@ function App() {
           element={
             authUser ? (
               <MobileViewContext.Provider value={{ mobileView, setMobileView }}>
-                <div className="flex h-screen overflow-hidden">
+                <div className="flex h-dvh min-h-dvh overflow-hidden bg-slate-950">
                   {/* Icon sidebar — always visible */}
                   <Logout />
 

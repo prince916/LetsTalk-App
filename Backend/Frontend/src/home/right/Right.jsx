@@ -23,7 +23,7 @@ function Right() {
   }
 
   return (
-    <div className="w-full flex flex-col bg-slate-900 text-gray-300 h-screen">
+    <div className="w-full flex flex-col bg-slate-900 text-gray-300 h-dvh min-h-dvh">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (

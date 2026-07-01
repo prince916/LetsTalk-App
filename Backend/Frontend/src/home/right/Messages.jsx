@@ -21,7 +21,7 @@ function Messages() {
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-2">
+    <div className="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 min-h-0">
       {loading ? (
         <Loading />
       ) : (
