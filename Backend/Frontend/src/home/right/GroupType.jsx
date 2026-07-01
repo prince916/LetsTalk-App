@@ -99,7 +99,7 @@ function GroupType() {
   }, [typingTimeout, imagePreview]);
 
   return (
-    <form onSubmit={handleSubmit} className="relative flex-shrink-0">
+    <form onSubmit={handleSubmit} className="relative shrink-0">
       {showEmojiPicker && (
         <div className="absolute bottom-full left-2 z-50 mb-1">
           <EmojiPicker
@@ -130,7 +130,7 @@ function GroupType() {
           </p>
         </div>
       )}
-      <div className="flex items-center gap-1 min-h-[3.5rem] bg-gray-800 px-1 py-1">
+      <div className="flex items-center gap-1 min-h-14 bg-gray-800 px-1 py-1">
         <button
           type="button"
           onClick={() => setShowEmojiPicker((prev) => !prev)}

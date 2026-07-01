@@ -35,7 +35,7 @@ function GroupMessage({ message, isMe }) {
                 <img
                   src={message.imageUrl}
                   alt={message.message || "Sent image"}
-                  className="max-h-48 md:max-h-72 max-w-[200px] md:max-w-xs rounded-lg object-cover"
+                  className="max-h-48 md:max-h-72 max-w-50 md:max-w-xs rounded-lg object-cover"
                 />
               </a>
               {message.message && <p>{message.message}</p>}
