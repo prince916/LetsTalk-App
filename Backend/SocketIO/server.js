@@ -9,6 +9,7 @@ const allowedOrigins = [
   process.env.FRONTEND_URL,
   "http://localhost:4001",
   "http://localhost:5173",
+  "http://127.0.0.1:4001",
   "https://letstalk-app.onrender.com",
 ].filter(Boolean);
 

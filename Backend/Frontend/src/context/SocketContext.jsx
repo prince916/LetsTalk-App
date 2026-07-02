@@ -4,13 +4,17 @@ import io from "socket.io-client";
 const socketContext = createContext();
 
 const getSocketUrl = () => {
-  if (import.meta.env.VITE_SOCKET_URL) return import.meta.env.VITE_SOCKET_URL;
+  if (typeof window === "undefined") {
+    return "http://localhost:5002";
+  }
 
-  if (typeof window !== "undefined") {
-    const { hostname } = window.location;
-    if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return "http://localhost:5002";
-    }
+  if (import.meta.env.VITE_SOCKET_URL) {
+    return import.meta.env.VITE_SOCKET_URL;
+  }
+
+  const { protocol, hostname, port } = window.location;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return `${protocol}//${hostname}:${port || 4001}`;
   }
 
   return "https://letstalk-app.onrender.com";
@@ -55,7 +59,7 @@ export const SocketProvider = ({ children }) => {
       socket.close();
       setSocket(null);
     }
-  }, [authUser, socket]);
+  }, [authUser]);
 
   return (
     <socketContext.Provider value={{ socket, onlineUsers }}>
