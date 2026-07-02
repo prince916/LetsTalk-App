@@ -42,8 +42,9 @@ function Signup() {
       if (response.data) {
         toast.success("Signup successful! You can Login now.");
       }
-      localStorage.setItem("ChatApp", JSON.stringify(response.data));
-      setAuthUser(response.data);
+      const authPayload = response.data?.user ? response.data : { user: response.data };
+      localStorage.setItem("ChatApp", JSON.stringify(authPayload));
+      setAuthUser(authPayload);
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.response?.data?.message || "Signup failed";
       toast.error(errorMessage);
