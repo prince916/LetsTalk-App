@@ -2,6 +2,22 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createTokenAndSaveCookie from "../jwt/generateToken.js";
 
+export const getPublicFileUrl = (req, filePath) => {
+  if (!filePath) return "";
+  if (/^https?:\/\//i.test(filePath)) return filePath;
+
+  const configuredBaseUrl = process.env.BACKEND_URL || process.env.APP_URL || process.env.CLIENT_URL;
+  const forwardedProto = req.get?.("x-forwarded-proto")?.split(",")[0]?.trim();
+  const forwardedHost = req.get?.("x-forwarded-host")?.split(",")[0]?.trim();
+  const host = forwardedHost || req.get?.("host");
+  const protocol = forwardedProto || req.protocol || "http";
+  const baseUrl = configuredBaseUrl || `${protocol}://${host}`;
+  const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
+  const normalizedPath = filePath.startsWith("/") ? filePath : `/${filePath}`;
+
+  return `${normalizedBaseUrl}${normalizedPath}`;
+};
+
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
   try {
@@ -14,7 +30,9 @@ export const signup = async (req, res) => {
     }
     // Hashing the password
     const hashPassword = await bcrypt.hash(password, 10);
-    const profilePicture = req.file ? `/uploads/profiles/${req.file.filename}` : "";
+    const profilePicture = req.file
+      ? getPublicFileUrl(req, `/uploads/profiles/${req.file.filename}`)
+      : "";
 
     const newUser = await new User({
       name,
@@ -55,7 +73,7 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture || "",
+        profilePicture: getPublicFileUrl(req, user.profilePicture || ""),
       },
     });
   } catch (error) {
@@ -79,7 +97,11 @@ export const allUsers = async (req, res) => {
     const filteredUsers = await User.find({
       _id: { $ne: loggedInUser },
     }).select("-password");
-    res.status(201).json(filteredUsers);
+    const normalizedUsers = filteredUsers.map((user) => ({
+      ...user.toObject(),
+      profilePicture: getPublicFileUrl(req, user.profilePicture || ""),
+    }));
+    res.status(201).json(normalizedUsers);
   } catch (error) {
     console.log("Error in allUsers Controller: " + error);
   }

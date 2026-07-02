@@ -56,6 +56,23 @@ describe("User API — POST /api/user/signup", () => {
     expect(cookies.some((c) => c.startsWith("jwt="))).toBe(true);
   });
 
+  test("✅ returns a public image URL when signup includes a profile picture", async () => {
+    const res = await request(app)
+      .post("/api/user/signup")
+      .attach("profilePicture", Buffer.from("fake-image-bytes"), {
+        filename: "avatar.png",
+        contentType: "image/png",
+      })
+      .field("name", "Image User")
+      .field("email", uniqueEmail())
+      .field("password", "Pass1234!")
+      .field("confirmPassword", "Pass1234!");
+
+    expect(res.status).toBe(201);
+    expect(res.body.user.profilePicture).toMatch(/^https?:\/\//i);
+    expect(res.body.user.profilePicture).toContain("/uploads/profiles/");
+  });
+
   test("❌ fails when passwords do not match", async () => {
     const res = await request(app).post("/api/user/signup").send({
       name: "Bob",
