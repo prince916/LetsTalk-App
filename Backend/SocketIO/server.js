@@ -4,11 +4,27 @@ import express from "express";
 
 const app = express();
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  process.env.FRONTEND_URL,
+  "http://localhost:4001",
+  "http://localhost:5173",
+  "https://letstalk-app.onrender.com",
+].filter(Boolean);
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "https://letstalk-app.onrender.com",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    },
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 

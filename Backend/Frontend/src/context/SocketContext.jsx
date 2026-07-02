@@ -2,7 +2,21 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider.jsx";
 import io from "socket.io-client";
 const socketContext = createContext();
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5002";
+
+const getSocketUrl = () => {
+  if (import.meta.env.VITE_SOCKET_URL) return import.meta.env.VITE_SOCKET_URL;
+
+  if (typeof window !== "undefined") {
+    const { hostname } = window.location;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://localhost:5002";
+    }
+  }
+
+  return "https://letstalk-app.onrender.com";
+};
+
+const SOCKET_URL = getSocketUrl();
 
 // it is a hook.
 export const useSocketContext = () => {
@@ -15,24 +29,34 @@ export const SocketProvider = ({ children }) => {
   const [authUser] = useAuth();
 
   useEffect(() => {
-    if (authUser) {
-      const socket = io("https://letstalk-app.onrender.com", {
+    if (authUser?.user?._id) {
+      const socketInstance = io(SOCKET_URL, {
         query: {
           userId: authUser.user._id,
         },
+        transports: ["websocket", "polling"],
+        reconnection: true,
+        reconnectionAttempts: 5,
+        reconnectionDelay: 500,
       });
-      setSocket(socket);
-      socket.on("getOnlineUsers", (users) => {
+
+      setSocket(socketInstance);
+      socketInstance.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
       });
-      return () => socket.close();
-    } else {
-      if (socket) {
-        socket.close();
-        setSocket(null);
-      }
+
+      return () => {
+        socketInstance.off("getOnlineUsers");
+        socketInstance.disconnect();
+      };
     }
-  }, [authUser]);
+
+    if (socket) {
+      socket.close();
+      setSocket(null);
+    }
+  }, [authUser, socket]);
+
   return (
     <socketContext.Provider value={{ socket, onlineUsers }}>
       {children}

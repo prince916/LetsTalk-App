@@ -70,6 +70,10 @@ export const CallProvider = ({ children }) => {
   }, []);
 
   const getMediaStream = useCallback(async () => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getTracks().forEach((track) => track.stop());
+    }
+
     const stream = await navigator.mediaDevices.getUserMedia({
       video: true,
       audio: true,
@@ -91,9 +95,10 @@ export const CallProvider = ({ children }) => {
         }
       };
 
-      peerConnection.ontrack = (event) => {
-        setRemoteStream(event.streams[0]);
-      };
+      peerConnection.addEventListener("track", (event) => {
+        const incomingStream = event.streams?.[0] || new MediaStream([event.track]);
+        setRemoteStream(incomingStream);
+      });
 
       peerConnection.onconnectionstatechange = () => {
         if (["failed", "closed", "disconnected"].includes(peerConnection.connectionState)) {
