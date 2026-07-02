@@ -6,36 +6,34 @@ import useGetSocketMessage from "../../context/useGetSocketMessage.jsx";
 
 function Messages() {
   const { loading, messages } = useGetMessage();
-  useGetSocketMessage(); // listening incoming messages
-  console.log(messages);
+  useGetSocketMessage();
 
   const lastMsgRef = useRef();
   useEffect(() => {
     setTimeout(() => {
       if (lastMsgRef.current) {
-        lastMsgRef.current.scrollIntoView({
-          behavior: "smooth",
-        });
+        lastMsgRef.current.scrollIntoView({ behavior: "smooth" });
       }
     }, 100);
   }, [messages]);
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto overflow-x-hidden p-2 min-h-0">
+    <div className="flex h-full min-h-0 flex-col overflow-y-auto overflow-x-hidden bg-transparent px-2 py-3 sm:px-4">
       {loading ? (
-        <Loading />
-      ) : (
-        messages.length > 0 &&
+        <div className="flex flex-1 items-center justify-center">
+          <Loading />
+        </div>
+      ) : messages.length > 0 ? (
         messages.map((message) => (
           <div key={message._id} ref={lastMsgRef}>
             <Message message={message} />
           </div>
         ))
-      )}
-
-      {!loading && messages.length === 0 && (
+      ) : (
         <div className="flex flex-1 items-center justify-center">
-          <p className="text-center">Say! Hi to start the conversation</p>
+          <div className="rounded-2xl border border-white/10 bg-slate-900/70 px-5 py-4 text-center text-sm text-slate-400 shadow-lg shadow-black/20">
+            Say hello to start the conversation.
+          </div>
         </div>
       )}
     </div>

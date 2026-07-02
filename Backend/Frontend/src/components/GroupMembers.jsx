@@ -3,6 +3,7 @@ import { useGroupContext } from "../context/GroupContext.jsx";
 import useGroupMembers from "../context/useGroupMembers.js";
 import useGetAllUsers from "../context/useGetAllUsers.jsx";
 import { MdClose, MdAdd } from "react-icons/md";
+import Avatar from "./Avatar.jsx";
 
 function GroupMembers() {
   const { selectedGroup, groupMembers } = useGroupContext();
@@ -80,13 +81,7 @@ function GroupMembers() {
             className="flex items-center justify-between p-4 border-b border-slate-700 hover:bg-slate-800"
           >
             <div className="flex items-center space-x-3">
-              <div className="avatar placeholder">
-                <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
-                  <span className="text-xs">
-                    {member.userId.name?.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              </div>
+              <Avatar name={member.userId.name} seed={member.userId._id} src={member.userId.profilePicture} className="h-10 w-10" fallbackClassName="text-xs" />
               <div>
                 <p className="font-semibold text-sm">{member.userId.name}</p>
                 <span className="text-xs text-gray-400">

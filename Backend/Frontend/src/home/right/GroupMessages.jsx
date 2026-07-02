@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import useGroup from "../../statemanage/useGroup.js";
 import useGetGroupMessages from "../../context/useGetGroupMessages.js";
 import Loading from "../../components/Loading.jsx";
+import Avatar from "../../components/Avatar.jsx";
 
 function GroupMessage({ message, isMe }) {
   const createdAt = new Date(message.createdAt);
@@ -17,15 +18,7 @@ function GroupMessage({ message, isMe }) {
     <div className="p-4">
       <div className={`chat ${chatName}`}>
         <div className="chat-image avatar">
-          <div className="w-10 rounded-full">
-            <div className="avatar placeholder">
-              <div className="bg-neutral-focus text-neutral-content rounded-full w-10">
-                <span className="text-xs">
-                  {message.senderId.name?.charAt(0).toUpperCase()}
-                </span>
-              </div>
-            </div>
-          </div>
+          <Avatar name={message.senderId.name} seed={message.senderId._id} src={message.senderId.profilePicture} className="h-10 w-10" fallbackClassName="text-xs" />
         </div>
         <div className={`chat-bubble text-white ${chatColor}`}>
           <div className="text-xs font-semibold">{message.senderId.name}</div>

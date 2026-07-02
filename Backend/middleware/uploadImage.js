@@ -1,44 +1,38 @@
-// import { v2 as cloudinary } from "cloudinary";
-// import { CloudinaryStorage } from "multer-storage-cloudinary";
-// import multer from "multer";
+import fs from "fs";
+import path from "path";
+import multer from "multer";
+import { fileURLToPath } from "url";
 
-// Configure Cloudinary using env vars
-// cloudinary.config({
-//   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-//   api_key: process.env.CLOUDINARY_API_KEY,
-//   api_secret: process.env.CLOUDINARY_API_SECRET,
-// });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadDir = path.join(__dirname, "..", "uploads", "profiles");
 
-// const allowedFormats = ["jpg", "png", "webp", "gif"];
+fs.mkdirSync(uploadDir, { recursive: true });
 
-// const storage = new CloudinaryStorage({
-//   cloudinary,
-//   params: {
-//     folder: "letstalk/messages",
-//     allowed_formats: allowedFormats,
-//     // Cloudinary generates a unique public_id automatically
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const baseName = path.basename(file.originalname, ext).replace(/\s+/g, "-").toLowerCase();
+    cb(null, `${Date.now()}-${baseName}${ext}`);
+  },
+});
 
-// const fileFilter = (_req, file, cb) => {
-//   const allowedMimeTypes = [
-//     "image/jpeg",
-//     "image/png",
-//     "image/webp",
-//     "image/gif",
-//   ];
-//   if (!allowedMimeTypes.includes(file.mimetype)) {
-//     return cb(new Error("Only JPG, PNG, WEBP, and GIF images are allowed"));
-//   }
-//   cb(null, true);
-// };
+const fileFilter = (_req, file, cb) => {
+  const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+  if (!allowedMimeTypes.includes(file.mimetype)) {
+    return cb(new Error("Only JPG, PNG, WEBP, and GIF images are allowed"));
+  }
+  cb(null, true);
+};
 
-// export const uploadMessageImage = multer({
-//   storage,
-//   fileFilter,
-//   limits: {
-//     fileSize: 5 * 1024 * 1024, // 5 MB
-//   },
-// });
+const upload = multer({
+  storage,
+  fileFilter,
+  limits: {
+    fileSize: 5 * 1024 * 1024,
+  },
+});
 
-// export { cloudinary };
+export const uploadProfileImage = upload;
+export const uploadMessageImage = uploadProfileImage;

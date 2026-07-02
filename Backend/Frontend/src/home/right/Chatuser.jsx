@@ -4,6 +4,7 @@ import { useSocketContext } from "../../context/SocketContext.jsx";
 import { useCallContext } from "../../context/CallContext.jsx";
 import { MdVideocam } from "react-icons/md";
 import { useMobileView } from "../../App.jsx";
+import Avatar from "../../components/Avatar.jsx";
 
 function Chatuser() {
   const { selectedConversation } = useConversation();
@@ -13,11 +14,10 @@ function Chatuser() {
   const isOnline = onlineUsers.includes(selectedConversation?._id);
 
   return (
-    <div className="flex h-14 md:h-[12vh] items-center justify-between bg-gray-700 px-3 md:px-5 hover:bg-gray-600 duration-300 flex-shrink-0">
-      <div className="flex items-center space-x-2 md:space-x-4">
-        {/* Mobile back button */}
+    <div className="flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-slate-900/80 px-3 backdrop-blur md:h-[12vh] md:px-5">
+      <div className="flex items-center gap-2 md:gap-4">
         <button
-          className="md:hidden btn btn-ghost btn-sm p-1"
+          className="btn btn-ghost btn-sm p-1 md:hidden"
           onClick={() => setMobileView?.("list")}
           aria-label="Back to contacts"
         >
@@ -25,26 +25,25 @@ function Chatuser() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
+
         <div className={`avatar ${isOnline ? "avatar-online" : "avatar-offline"}`}>
-          <div className="w-10 md:w-14 rounded-full bg-neutral-focus text-neutral-content">
-            <span className="flex h-full w-full items-center justify-center text-lg md:text-xl font-bold">
-              {selectedConversation?.name?.charAt(0).toUpperCase()}
-            </span>
-          </div>
+          <Avatar name={selectedConversation?.name} seed={selectedConversation?._id} src={selectedConversation?.profilePicture} className="h-11 w-11 md:h-14 md:w-14" fallbackClassName="text-lg font-semibold md:text-xl" />
         </div>
+
         <div>
-          <h1 className="text-base md:text-xl">{selectedConversation.name}</h1>
-          <span className="text-xs md:text-sm">{isOnline ? "Online" : "Offline"}</span>
+          <h1 className="text-base font-semibold text-white md:text-xl">{selectedConversation?.name}</h1>
+          <p className="text-xs text-slate-400 md:text-sm">{isOnline ? "Online now" : "Offline"}</p>
         </div>
       </div>
+
       <button
         type="button"
         onClick={() => callUser(selectedConversation)}
         disabled={!isOnline || Boolean(activeCall)}
-        className="btn btn-circle btn-ghost text-xl md:text-2xl"
+        className="btn btn-circle border-0 bg-sky-500/10 text-sky-300 hover:bg-sky-500/20"
         aria-label="Start video call"
       >
-        <MdVideocam />
+        <MdVideocam className="text-xl md:text-2xl" />
       </button>
     </div>
   );

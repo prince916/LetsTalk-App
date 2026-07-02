@@ -3,6 +3,7 @@ import useGroup from "../../statemanage/useGroup.js";
 import { useGroupContext } from "../../context/GroupContext.jsx";
 import { useAuth } from "../../context/AuthProvider.jsx";
 import { useMobileView } from "../../App.jsx";
+import Avatar from "../../components/Avatar.jsx";
 
 function GroupItem({ group }) {
   const { selectedGroup: stateSelectedGroup, setSelectedGroup: setStateSelectedGroup } = useGroup();
@@ -29,17 +30,11 @@ function GroupItem({ group }) {
       }`}
       onClick={handleSelectGroup}
     >
-      <div className="flex space-x-4 px-8 py-3 hover:bg-slate-700 duration-300 cursor-pointer">
-        <div className="avatar placeholder">
-          <div className="bg-neutral-focus text-neutral-content rounded-full w-12">
-            <span className="text-xl font-bold">
-              {group.name.charAt(0).toUpperCase()}
-            </span>
-          </div>
-        </div>
-        <div className="flex-1">
-          <h1 className="font-bold text-sm">{group.name}</h1>
-          <span className="text-xs text-gray-400">
+      <div className="flex items-center gap-3 px-3 py-3 hover:bg-slate-700 duration-300 cursor-pointer sm:px-5">
+        <Avatar name={group.name} seed={group._id} className="h-12 w-12" fallbackClassName="text-xl font-bold" />
+        <div className="min-w-0 flex-1">
+          <h1 className="truncate text-sm font-bold">{group.name}</h1>
+          <span className="block truncate text-xs text-gray-400">
             {group.members?.length || 0} members
             {onlineCount > 0 && ` • ${onlineCount} online`}
           </span>

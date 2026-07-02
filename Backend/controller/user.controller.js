@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import createTokenAndSaveCookie from "../jwt/generateToken.js";
+
 export const signup = async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
   try {
@@ -13,10 +14,13 @@ export const signup = async (req, res) => {
     }
     // Hashing the password
     const hashPassword = await bcrypt.hash(password, 10);
+    const profilePicture = req.file ? `/uploads/profiles/${req.file.filename}` : "";
+
     const newUser = await new User({
       name,
       email,
       password: hashPassword,
+      profilePicture,
     });
     await newUser.save();
     if (newUser) {
@@ -27,6 +31,7 @@ export const signup = async (req, res) => {
           _id: newUser._id,
           name: newUser.name,
           email: newUser.email,
+          profilePicture: newUser.profilePicture,
         },
       });
     }
@@ -50,6 +55,7 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        profilePicture: user.profilePicture || "",
       },
     });
   } catch (error) {

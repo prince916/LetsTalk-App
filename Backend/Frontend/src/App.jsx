@@ -19,7 +19,7 @@ function App() {
   const [authUser, setAuthUser] = useAuth();
   // "list" = show contacts sidebar; "chat" = show chat panel
   const [mobileView, setMobileView] = useState("list");
-  console.log(authUser);
+
   return (
     <>
       <Routes>
@@ -28,21 +28,19 @@ function App() {
           element={
             authUser ? (
               <MobileViewContext.Provider value={{ mobileView, setMobileView }}>
-                <div className="flex h-dvh min-h-dvh overflow-hidden bg-slate-950">
-                  {/* Icon sidebar — always visible */}
-                  <Logout />
+                <div className="flex h-dvh min-h-dvh flex-col overflow-hidden bg-slate-950 md:flex-row">
+                  {/* Icon/sidebar control area */}
+                  <div className="w-full md:w-auto">
+                    <Logout />
+                  </div>
 
                   {/* Contacts list — hidden on mobile when chat is open */}
                   <div
                     className={`
-                      ${
-                        mobileView === "list"
-                          ? "flex"
-                          : "hidden"
-                      }
+                      ${mobileView === "list" ? "flex" : "hidden"}
                       md:flex
-                      w-full md:w-[30%] lg:w-[27%]
-                      shrink-0
+                      w-full md:w-[32%] lg:w-[28%] xl:w-[24%]
+                      min-w-0 shrink-0
                     `}
                   >
                     <Left />
@@ -51,11 +49,7 @@ function App() {
                   {/* Chat panel — hidden on mobile when list is shown */}
                   <div
                     className={`
-                      ${
-                        mobileView === "chat"
-                          ? "flex"
-                          : "hidden"
-                      }
+                      ${mobileView === "chat" ? "flex" : "hidden"}
                       md:flex
                       flex-1 min-w-0
                     `}

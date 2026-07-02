@@ -3,11 +3,12 @@ import { FaSearch } from "react-icons/fa";
 import useGetAllUsers from "../../context/useGetAllUsers";
 import useConversation from "../../statemanage/useConversation";
 import toast from "react-hot-toast";
+
 function Search() {
   const [search, setSearch] = useState("");
   const [allUsers] = useGetAllUsers();
   const { setSelectedConversation } = useConversation();
-  console.log(allUsers);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!search) return;
@@ -21,26 +22,21 @@ function Search() {
       toast.error("User not found");
     }
   };
+
   return (
-    <div className="shrink-0">
-      <div className="px-6 py-4">
-        <form onSubmit={handleSubmit}>
-          <div className="flex space-x-3">
-            <label className="border-gray-700 bg-slate-900 rounded-lg p-3 flex items-center gap-2 w-[80%]">
-              <input
-                type="text"
-                className="grow outline-none bg-transparent"
-                placeholder="Search"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </label>
-            <button>
-              <FaSearch className="text-5xl p-2 hover:bg-gray-600 rounded-full duration-300" />
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className="shrink-0 px-3 pb-2 sm:px-5">
+      <form onSubmit={handleSubmit} className="w-full">
+        <label className="flex w-full items-center gap-2 rounded-2xl border border-white/10 bg-slate-900/80 px-3 py-3 shadow-inner shadow-black/20">
+          <FaSearch className="text-slate-400" />
+          <input
+            type="text"
+            className="grow bg-transparent text-sm outline-none placeholder:text-slate-500"
+            placeholder="Search contacts"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
+      </form>
     </div>
   );
 }

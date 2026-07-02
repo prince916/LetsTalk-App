@@ -58,72 +58,37 @@ function Typesend() {
   return (
     <form onSubmit={handleSubmit} className="relative shrink-0">
       {showEmojiPicker && (
-        <div className="absolute bottom-full left-2 z-50 mb-1">
-          <EmojiPicker
-            onEmojiClick={handleEmojiClick}
-            theme="dark"
-            width={Math.min(320, window.innerWidth - 20)}
-            height={350}
-          />
+        <div className="absolute bottom-full left-2 z-50 mb-2">
+          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" width={Math.min(320, window.innerWidth - 20)} height={350} />
         </div>
       )}
       {imagePreview && (
-        <div className="absolute bottom-full left-4 z-40 w-44 md:w-52 rounded-lg border border-slate-700 bg-slate-900 p-2 shadow-xl mb-1">
-          <button
-            type="button"
-            onClick={clearSelectedImage}
-            className="btn btn-xs btn-circle absolute -right-2 -top-2"
-            aria-label="Remove selected image"
-          >
+        <div className="absolute bottom-full left-4 z-40 mb-2 w-44 rounded-2xl border border-slate-700 bg-slate-900 p-2 shadow-xl md:w-52">
+          <button type="button" onClick={clearSelectedImage} className="btn btn-xs btn-circle absolute -right-2 -top-2" aria-label="Remove selected image">
             <MdClose />
           </button>
-          <img
-            src={imagePreview}
-            alt="Selected preview"
-            className="max-h-32 md:max-h-40 w-full rounded object-cover"
-          />
-          <p className="mt-2 truncate text-xs text-slate-300">
-            {selectedImage?.name}
-          </p>
+          <img src={imagePreview} alt="Selected preview" className="max-h-32 w-full rounded-xl object-cover md:max-h-40" />
+          <p className="mt-2 truncate text-xs text-slate-300">{selectedImage?.name}</p>
         </div>
       )}
-      <div className="flex items-center gap-1 min-h-14 bg-gray-800 px-1 py-1">
-        <button
-          type="button"
-          onClick={() => setShowEmojiPicker((prev) => !prev)}
-          className="btn btn-ghost text-xl md:text-2xl"
-          aria-label="Choose emoji"
-        >
+
+      <div className="flex min-h-14 items-center gap-1 rounded-[22px] border border-white/10 bg-slate-900/90 px-1 py-1 shadow-lg shadow-black/20">
+        <button type="button" onClick={() => setShowEmojiPicker((prev) => !prev)} className="btn btn-ghost h-10 w-10 rounded-2xl p-0 text-xl text-slate-300 hover:bg-slate-800 hover:text-white md:h-12 md:w-12 md:text-2xl" aria-label="Choose emoji">
           <BsEmojiSmile />
         </button>
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          className="btn btn-ghost text-xl md:text-2xl"
-          aria-label="Attach image"
-        >
+        <button type="button" onClick={() => fileInputRef.current?.click()} className="btn btn-ghost h-10 w-10 rounded-2xl p-0 text-xl text-slate-300 hover:bg-slate-800 hover:text-white md:h-12 md:w-12 md:text-2xl" aria-label="Attach image">
           <MdImage />
         </button>
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleImageChange}
-          className="hidden"
-        />
+        <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
         <input
           type="text"
-          placeholder={selectedImage ? "Add a caption..." : "Type here"}
+          placeholder={selectedImage ? "Add a caption..." : "Type a message..."}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="flex-1 min-w-0 py-2 px-3 rounded-xl outline-none bg-slate-900 text-sm md:text-base"
+          className="min-w-0 flex-1 rounded-xl bg-transparent px-3 py-2 text-sm outline-none placeholder:text-slate-500 md:text-base"
         />
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn-ghost text-xl md:text-2xl"
-        >
-          <IoSend />
+        <button type="submit" disabled={loading} className="btn h-10 w-10 rounded-2xl border-0 bg-sky-500/90 p-0 text-white hover:bg-sky-400 disabled:opacity-60 md:h-12 md:w-12">
+          {loading ? <span className="loading loading-spinner loading-sm" /> : <IoSend className="text-lg" />}
         </button>
       </div>
     </form>
