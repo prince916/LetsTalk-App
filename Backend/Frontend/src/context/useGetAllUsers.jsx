@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import axios from "axios";
 import toast from "react-hot-toast";
+import apiClient from "./axiosConfig.js";
 import { useAuth } from "./AuthProvider.jsx";
 
 function useGetAllUsers() {
@@ -21,8 +21,7 @@ function useGetAllUsers() {
       setLoading(true);
       try {
         const token = Cookies.get("jwt");
-        const response = await axios.get("/api/user/allUsers", {
-          credentials: "include",
+        const response = await apiClient.get("/api/user/allUsers", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

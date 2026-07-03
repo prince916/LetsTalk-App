@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import apiClient from "./axiosConfig.js";
 import { useGroupContext } from "../context/GroupContext.jsx";
 import { useAuth } from "./AuthProvider.jsx";
 
@@ -24,11 +24,10 @@ const useGetAllGroups = () => {
       try {
         const token = Cookies.get("jwt");
         
-        const res = await axios.get("/api/group/all", {
+        const res = await apiClient.get("/api/group/all", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          withCredentials: true,
         });
 
         setGroups(res.data.groups || []);

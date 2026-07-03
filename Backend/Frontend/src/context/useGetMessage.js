@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import useConversation from "../statemanage/useConversation.js";
-import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import apiClient from "./axiosConfig.js";
 import { useAuth } from "./AuthProvider.jsx";
 
 const useGetMessage = () => {
@@ -20,13 +20,12 @@ const useGetMessage = () => {
       setLoading(true);
       try {
         const token = Cookies.get("jwt");
-        const res = await axios.get(
+        const res = await apiClient.get(
           `/api/message/get/${selectedConversation._id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            withCredentials: true,
           }
         );
         setMessage(res.data);

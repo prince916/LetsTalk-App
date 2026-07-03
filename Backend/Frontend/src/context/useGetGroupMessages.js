@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
+import apiClient from "./axiosConfig.js";
 import useGroup from "../statemanage/useGroup.js";
 import { useAuth } from "./AuthProvider.jsx";
 
@@ -20,13 +20,12 @@ const useGetGroupMessages = () => {
       setLoading(true);
       try {
         const token = Cookies.get("jwt");
-        const res = await axios.get(
+        const res = await apiClient.get(
           `/api/group/${selectedGroup._id}/messages`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            withCredentials: true,
           }
         );
         setGroupMessages(res.data.messages || []);

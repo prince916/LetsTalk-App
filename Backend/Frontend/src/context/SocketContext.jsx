@@ -5,23 +5,18 @@ import io from "socket.io-client";
 const socketContext = createContext();
 
 const getSocketUrl = () => {
-  if (typeof window === "undefined") {
-    return "http://localhost:5002"; // SSR fallback
-  }
-
+  // Use Vite environment variable if available
   if (import.meta.env.VITE_SOCKET_URL) {
     return import.meta.env.VITE_SOCKET_URL;
   }
 
-  const { hostname, protocol } = window.location;
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return "http://localhost:5002";
+  // If in browser and not localhost, use window origin (for production)
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+    return window.location.origin;
   }
 
-  // ✅ Use wss:// if site is served over https
-  return protocol === "https:"
-    ? "wss://letstalk-app.onrender.com"
-    : "http://letstalk-app.onrender.com";
+  // Development default
+  return "http://localhost:5002";
 };
 
 const SOCKET_URL = getSocketUrl();
