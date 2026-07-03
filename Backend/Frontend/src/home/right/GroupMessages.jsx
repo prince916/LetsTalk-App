@@ -56,7 +56,7 @@ function GroupMessages() {
   }, [groupMessages]);
 
   return (
-    <div className="flex-1 overflow-y-auto">
+    <div className="flex-1 min-h-0 overflow-y-auto px-2 py-3 sm:px-4">
       {loading ? (
         <Loading />
       ) : groupMessages.length > 0 ? (
@@ -69,7 +69,7 @@ function GroupMessages() {
           </div>
         ))
       ) : (
-        <div className="flex flex-1 items-center justify-center h-full">
+        <div className="flex h-full flex-1 items-center justify-center">
           <p className="text-center">
             No messages yet. Start the conversation!
           </p>

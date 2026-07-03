@@ -31,33 +31,35 @@ function App() {
           element={
             authUser ? (
               <MobileViewContext.Provider value={{ mobileView, setMobileView }}>
-                <div className="flex h-dvh min-h-dvh flex-col overflow-hidden bg-slate-950 md:flex-row">
+                <div className="flex h-dvh min-h-0 flex-col overflow-hidden bg-slate-950 md:flex-row">
                   {/* Icon/sidebar control area */}
-                  <div className="w-full md:w-auto">
+                  <div className="w-full shrink-0 md:w-auto">
                     <Logout />
                   </div>
 
-                  {/* Contacts list — hidden on mobile when chat is open */}
-                  <div
-                    className={`
-                      ${mobileView === "list" ? "flex" : "hidden"}
-                      md:flex
-                      w-full md:w-[32%] lg:w-[28%] xl:w-[24%]
-                      min-w-0 shrink-0
-                    `}
-                  >
-                    <Left />
-                  </div>
+                  <div className="flex min-h-0 flex-1 overflow-hidden md:flex-row">
+                    {/* Contacts list — hidden on mobile when chat is open */}
+                    <div
+                      className={`
+                        ${mobileView === "list" ? "flex" : "hidden"}
+                        md:flex
+                        min-h-0 w-full min-w-0 md:w-[32%] lg:w-[28%] xl:w-[24%]
+                        shrink-0
+                      `}
+                    >
+                      <Left />
+                    </div>
 
-                  {/* Chat panel — hidden on mobile when list is shown */}
-                  <div
-                    className={`
-                      ${mobileView === "chat" ? "flex" : "hidden"}
-                      md:flex
-                      flex-1 min-w-0
-                    `}
-                  >
-                    <Right />
+                    {/* Chat panel — hidden on mobile when list is shown */}
+                    <div
+                      className={`
+                        ${mobileView === "chat" ? "flex" : "hidden"}
+                        md:flex
+                        min-h-0 flex-1 min-w-0
+                      `}
+                    >
+                      <Right />
+                    </div>
                   </div>
                 </div>
               </MobileViewContext.Provider>

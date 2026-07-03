@@ -9,7 +9,7 @@ function Left() {
   const [tab, setTab] = useState("users");
 
   return (
-    <div className="flex h-dvh min-h-dvh w-full min-w-0 flex-col overflow-hidden border-r border-white/10 bg-slate-950/95 text-slate-200">
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden border-r border-white/10 bg-slate-950/95 text-slate-200">
       <div className="border-b border-white/10 px-3 py-3 sm:px-5 sm:py-4">
         <div className="flex items-center justify-between">
           <div>
@@ -48,7 +48,7 @@ function Left() {
       </div>
 
       <Search />
-      <div className="flex-1 overflow-y-auto px-2 pb-2">
+      <div className="flex-1 min-h-0 overflow-y-auto px-2 pb-2">
         {tab === "users" ? <Users /> : <Groups />}
       </div>
 

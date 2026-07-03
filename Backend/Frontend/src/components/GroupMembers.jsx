@@ -35,8 +35,8 @@ function GroupMembers() {
   };
 
   return (
-    <div className="w-full">
-      <div className="bg-slate-800 p-4 border-b border-slate-700">
+    <div className="flex h-full min-h-0 w-full flex-col">
+      <div className="border-b border-slate-700 bg-slate-800 p-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">
             Members ({groupMembers.length})
@@ -72,7 +72,7 @@ function GroupMembers() {
         )}
       </div>
 
-      <div className="overflow-y-auto" style={{ maxHeight: "calc(60vh - 8vh)" }}>
+      <div className="flex-1 min-h-0 overflow-y-auto">
         {groupMembers.map((member) => (
           <div
             key={member.userId._id}

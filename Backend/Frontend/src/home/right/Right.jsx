@@ -21,7 +21,7 @@ function Right() {
   }
 
   return (
-    <div className="flex h-dvh min-h-dvh w-full min-w-0 flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_32%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">
+    <div className="flex h-full min-h-0 w-full min-w-0 flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_32%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
@@ -46,7 +46,7 @@ const NoChatSelected = () => {
   const { setMobileView } = useMobileView() || {};
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       <div className="flex items-center bg-slate-900/70 p-3 backdrop-blur md:hidden">
         <button
           onClick={() => setMobileView?.("list")}
@@ -59,7 +59,7 @@ const NoChatSelected = () => {
         </button>
       </div>
 
-      <div className="flex flex-1 items-center justify-center px-6 py-8">
+      <div className="flex flex-1 min-h-0 items-center justify-center px-6 py-8">
         <div className="w-full max-w-lg rounded-[28px] border border-white/10 bg-slate-900/70 p-5 text-center shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8">
           <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">

@@ -17,14 +17,11 @@ function Groups() {
   }
 
   return (
-    <div>
-      <h1 className="px-8 py-2 text-white font-semibold bg-slate-800 rounded-md">
+    <div className="flex h-full min-h-0 flex-col gap-2">
+      <h1 className="rounded-md bg-slate-800 px-4 py-2 font-semibold text-white sm:px-8">
         Groups
       </h1>
-      <div
-        className="py-2 flex-1 overflow-y-auto"
-        style={{ maxHeight: "calc(84vh - 10vh)" }}
-      >
+      <div className="flex-1 min-h-0 overflow-y-auto py-2">
         {groups && groups.length > 0 ? (
           groups.map((group) => <GroupItem key={group._id} group={group} />)
         ) : (

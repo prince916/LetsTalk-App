@@ -25,7 +25,7 @@ function GroupChatInterface() {
 
   if (!selectedGroup) {
     return (
-      <div className="flex h-dvh min-h-dvh items-center justify-center bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.08),transparent_32%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] px-6">
+      <div className="flex h-full min-h-0 items-center justify-center bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.08),transparent_32%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] px-6">
         <div className="animate-fade-in rounded-[28px] border border-white/10 bg-slate-900/70 px-8 py-8 text-center shadow-2xl shadow-black/30 backdrop-blur-xl">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-sky-500/15 text-sky-300">
             <MdPeople className="text-2xl" />
@@ -38,7 +38,7 @@ function GroupChatInterface() {
   }
 
   return (
-    <div className="flex h-dvh min-h-dvh w-full flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.1),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">
+    <div className="flex h-full min-h-0 w-full flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.1),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">
       <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-slate-900/70 px-3 py-3 backdrop-blur md:px-4 md:py-4">
         <div className="flex items-center gap-2">
           <button
@@ -68,7 +68,7 @@ function GroupChatInterface() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 overflow-hidden">
         {tab === "chat" && (
           <div className="flex h-full flex-col">
             <GroupMessages />

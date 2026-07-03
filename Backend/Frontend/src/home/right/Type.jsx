@@ -72,7 +72,7 @@ function Typesend() {
         </div>
       )}
 
-      <div className="flex min-h-14 items-center gap-1 rounded-[22px] border border-white/10 bg-slate-900/90 px-1 py-1 shadow-lg shadow-black/20">
+      <div className="flex min-h-14 flex-wrap items-center gap-1 rounded-[22px] border border-white/10 bg-slate-900/90 px-1 py-1 shadow-lg shadow-black/20 sm:flex-nowrap">
         <button type="button" onClick={() => setShowEmojiPicker((prev) => !prev)} className="btn btn-ghost h-10 w-10 rounded-2xl p-0 text-xl text-slate-300 hover:bg-slate-800 hover:text-white md:h-12 md:w-12 md:text-2xl" aria-label="Choose emoji">
           <BsEmojiSmile />
         </button>
