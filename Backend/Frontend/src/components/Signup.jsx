@@ -65,17 +65,17 @@ function Signup() {
               </div>
               <h2 className="mt-8 text-3xl font-semibold text-white">Create your social space.</h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-slate-300">
-                Start conversations, build communities, and enjoy a more refined messaging experience from the very first login.
+                Connect instantly through private chats, group conversations, and a seamless messaging experience.
               </p>
             </div>
-            <div className="space-y-3 text-sm text-slate-200">
+            {/* <div className="space-y-3 text-sm text-slate-200">
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" /> Personalized chat experience
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-sky-400" /> Easier group management and updates
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="p-8 sm:p-10 lg:p-12">

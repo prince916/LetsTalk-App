@@ -52,17 +52,17 @@ function Login() {
               </div>
               <h2 className="mt-8 text-3xl font-semibold text-white">Stay connected in real time.</h2>
               <p className="mt-3 max-w-md text-sm leading-6 text-slate-300">
-                Join private conversations, manage group chats, and keep every conversation moving with a smoother experience.
+                Message privately, join group conversations, and enjoy fast, seamless communication—all in one place.
               </p>
             </div>
-            <div className="space-y-3 text-sm text-slate-200">
+            {/* <div className="space-y-3 text-sm text-slate-200">
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" /> Fast and secure messaging
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-sky-400" /> Modern group and direct chat flow
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* Right side form */}
