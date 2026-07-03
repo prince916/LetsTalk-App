@@ -31,13 +31,27 @@ function getAvatarStyle(seed, name) {
   };
 }
 
+function getImageUrl(src) {
+  if (!src) return "";
+  
+  // If it's already an absolute URL, return as-is
+  if (/^https?:\/\//i.test(src)) {
+    return src;
+  }
+  
+  // If it's a relative path, construct the backend URL
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || `http://localhost:5002`;
+  return `${backendUrl}${src.startsWith("/") ? src : `/${src}`}`;
+}
+
 function Avatar({ name = "User", seed, src, className = "h-12 w-12", imageClassName = "h-full w-full object-cover", fallbackClassName = "text-sm font-semibold" }) {
   const { initials, gradientClass } = getAvatarStyle(seed, name);
+  const imageUrl = getImageUrl(src);
 
   return (
     <div className={`relative shrink-0 overflow-hidden rounded-full ring-1 ring-white/10 ${className}`}>
-      {src ? (
-        <img src={src} alt={name} className={imageClassName} />
+      {imageUrl ? (
+        <img src={imageUrl} alt={name} className={imageClassName} />
       ) : (
         <div className={`flex h-full w-full items-center justify-center bg-linear-to-br ${gradientClass} text-white ${fallbackClassName}`}>
           <span>{initials}</span>

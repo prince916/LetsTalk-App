@@ -53,7 +53,7 @@ export const signup = async (req, res) => {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        profilePicture: getPublicFileUrl(req, newUser.profilePicture),
+        profilePicture: newUser.profilePicture, // Return relative path
       },
     });
   } catch (error) {
@@ -83,7 +83,7 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: getPublicFileUrl(req, user.profilePicture),
+        profilePicture: user.profilePicture, // Return relative path
       },
     });
   } catch (error) {
@@ -109,7 +109,7 @@ export const allUsers = async (req, res) => {
 
     const normalizedUsers = filteredUsers.map((user) => ({
       ...user.toObject(),
-      profilePicture: getPublicFileUrl(req, user.profilePicture),
+      // Return relative path - frontend will construct the full URL
     }));
 
     res.status(200).json(normalizedUsers);
