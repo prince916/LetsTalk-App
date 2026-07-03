@@ -14,7 +14,7 @@ const getSocketUrl = () => {
 
   const { protocol, hostname, port } = window.location;
   if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return `${protocol}//${hostname}:${port || 4001}`;
+    return "http://localhost:5002";
   }
 
   return "https://letstalk-app.onrender.com";

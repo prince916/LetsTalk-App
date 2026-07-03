@@ -60,14 +60,28 @@ export const signup = async (req, res) => {
 };
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const user = await User.findOne({ email });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!user || !isMatch) {
-      return res.status(400).json({ error: "Invalid user credential" });
+
+    // Check if user exists first
+    if (!user) {
+      return res.status(400).json({
+        error: "Invalid email or password",
+      });
     }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).json({
+        error: "Invalid email or password",
+      });
+    }
+
     createTokenAndSaveCookie(user._id, res);
-    res.status(201).json({
+
+    res.status(200).json({
       message: "User logged in successfully",
       user: {
         _id: user._id,
@@ -77,8 +91,10 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Login Error:", error);
+    res.status(500).json({
+      error: "Internal server error",
+    });
   }
 };
 export const logout = async (req, res) => {
