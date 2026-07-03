@@ -1,9 +1,8 @@
-import React from "react";
 import useConversation from "../../statemanage/useConversation.js";
-import { useSocketContext } from "../../context/SocketContext.jsx";
-import { useCallContext } from "../../context/CallContext.jsx";
+import { useSocketContext } from "../../context/SocketStateContext.jsx";
+import { useCallContext } from "../../context/CallStateContext.jsx";
 import { MdVideocam } from "react-icons/md";
-import { useMobileView } from "../../App.jsx";
+import { useMobileView } from "../../context/MobileViewContext.jsx";
 import Avatar from "../../components/Avatar.jsx";
 
 function Chatuser() {

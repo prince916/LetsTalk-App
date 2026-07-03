@@ -1,5 +1,4 @@
-import React, { useEffect, useRef } from "react";
-import useGroup from "../../statemanage/useGroup.js";
+import { useEffect, useRef } from "react";
 import useGetGroupMessages from "../../context/useGetGroupMessages.js";
 import Loading from "../../components/Loading.jsx";
 import Avatar from "../../components/Avatar.jsx";

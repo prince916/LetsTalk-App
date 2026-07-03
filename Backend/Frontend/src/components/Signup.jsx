@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { useAuth } from "../context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 function Signup() {
-  const [, setAuthUser] = useAuth();
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
+    getValues,
     formState: { errors },
   } = useForm();
 
-  const password = watch("password", "");
-  const confirmPassword = watch("confirmPassword", "");
-
   const validatePasswordMatch = (value) => {
-    return value === password || "Passwords do not match";
+    return value === getValues("password") || "Passwords do not match";
   };
 
   const onSubmit = async (data) => {
@@ -41,10 +37,8 @@ function Signup() {
 
       if (response.data) {
         toast.success("Signup successful! You can Login now.");
+        navigate("/login");
       }
-      const authPayload = response.data?.user ? response.data : { user: response.data };
-      localStorage.setItem("ChatApp", JSON.stringify(authPayload));
-      setAuthUser(authPayload);
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.response?.data?.message || "Signup failed";
       toast.error(errorMessage);

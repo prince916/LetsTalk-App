@@ -1,4 +1,3 @@
-import React from "react";
 import User from "./User.jsx";
 import useGetAllUsers from "../../context/useGetAllUsers.jsx";
 

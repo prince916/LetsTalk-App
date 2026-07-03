@@ -1,8 +1,6 @@
-import React from "react";
 import GroupItem from "./GroupItem.jsx";
-import { useGroupContext } from "../../context/GroupContext.jsx";
+import { useGroupContext } from "../../context/GroupStateContext.jsx";
 import useGetAllGroups from "../../context/useGetAllGroups.js";
-import Loading from "../../components/Loading.jsx";
 
 function Groups() {
   const { groups, loading } = useGroupContext();

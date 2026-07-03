@@ -1,26 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import apiClient from "./axiosConfig.js";
-import { useGroupContext } from "../context/GroupContext.jsx";
-import { useAuth } from "./AuthProvider.jsx";
+import { useGroupContext } from "../context/GroupStateContext.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 const useGetAllGroups = () => {
   const [loading, setLoading] = useState(false);
   const { setGroups, setLoading: setContextLoading } = useGroupContext();
   const [authUser] = useAuth();
+  const userId = authUser?.user?._id;
 
   useEffect(() => {
-    // Only fetch if user is authenticated
-    if (!authUser?.user?._id) {
-      setGroups([]);
-      setLoading(false);
+    if (!userId) {
       return;
     }
+
+    let isCancelled = false;
 
     const getGroups = async () => {
       setLoading(true);
       setContextLoading(true);
+
       try {
         const token = Cookies.get("jwt");
         
@@ -30,27 +31,33 @@ const useGetAllGroups = () => {
           },
         });
 
-        setGroups(res.data.groups || []);
-        setLoading(false);
-        setContextLoading(false);
+        if (!isCancelled) {
+          setGroups(res.data.groups || []);
+        }
       } catch (error) {
         console.error("Error fetching groups:", error);
-        setLoading(false);
-        setContextLoading(false);
         
-        // Show error toast for auth failures
-        if (error.response?.status === 401) {
+        if (!isCancelled && error.response?.status === 401) {
           toast.error("Session expired. Please login again.");
-        } else if (error.response?.status === 403) {
+        } else if (!isCancelled && error.response?.status === 403) {
           toast.error("Not authorized to access groups.");
-        } else {
+        } else if (!isCancelled) {
           toast.error("Failed to load chats. Please try again.");
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
+          setContextLoading(false);
         }
       }
     };
 
     getGroups();
-  }, [authUser?.user?._id]); // Only depend on userId, not function references
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [setContextLoading, setGroups, userId]);
 
   return { loading };
 };

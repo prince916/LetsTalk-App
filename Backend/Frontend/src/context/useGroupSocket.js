@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect } from "react";
-import { useSocketContext } from "./SocketContext.jsx";
+import { useCallback, useEffect } from "react";
+import { useSocketContext } from "./SocketStateContext.jsx";
 import useGroup from "../statemanage/useGroup.js";
 
 const useGroupSocket = () => {
   const { socket } = useSocketContext();
-  const { selectedGroup, addGroupMessage, setGroupMessages } = useGroup();
+  const { selectedGroup, addGroupMessage } = useGroup();
 
   useEffect(() => {
     if (!socket) return;

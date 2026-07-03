@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { useGroupContext } from "../context/GroupContext.jsx";
-import useGroup from "../statemanage/useGroup.js";
+import { useEffect, useState } from "react";
+import { useGroupContext } from "../context/GroupStateContext.jsx";
+import { useMobileView } from "../context/MobileViewContext.jsx";
 import useGroupSocket from "../context/useGroupSocket.js";
 import { MdInfo, MdPeople } from "react-icons/md";
 import GroupMessages from "../home/right/GroupMessages.jsx";
 import GroupType from "../home/right/GroupType.jsx";
 import GroupMembers from "./GroupMembers.jsx";
 import GroupSettings from "./GroupSettings.jsx";
-import { useMobileView } from "../App.jsx";
 
 function GroupChatInterface() {
   const { selectedGroup } = useGroupContext();
   const [tab, setTab] = useState("chat"); // "chat", "members", "settings"
   const { joinGroup, leaveGroup } = useGroupSocket();
+  const { setMobileView } = useMobileView() || {};
 
   useEffect(() => {
     if (selectedGroup?._id) {
@@ -36,8 +36,6 @@ function GroupChatInterface() {
       </div>
     );
   }
-
-  const { setMobileView } = useMobileView() || {};
 
   return (
     <div className="flex h-dvh min-h-dvh w-full flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.1),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">

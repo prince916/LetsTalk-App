@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Search from "./Search.jsx";
 import Users from "./Users.jsx";
 import Groups from "./Groups.jsx";

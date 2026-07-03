@@ -1,21 +1,11 @@
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { useAuth } from "./AuthProvider.jsx";
-import { useSocketContext } from "./SocketContext.jsx";
-
-const CallContext = createContext();
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth } from "./AuthContext.jsx";
+import { CallContext } from "./CallStateContext.jsx";
+import { useSocketContext } from "./SocketStateContext.jsx";
 
 const iceServers = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
-
-export const useCallContext = () => useContext(CallContext);
 
 export const CallProvider = ({ children }) => {
   const [incomingCall, setIncomingCall] = useState(null);

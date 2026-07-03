@@ -1,8 +1,7 @@
-import React from "react";
 import useGroup from "../../statemanage/useGroup.js";
-import { useGroupContext } from "../../context/GroupContext.jsx";
-import { useAuth } from "../../context/AuthProvider.jsx";
-import { useMobileView } from "../../App.jsx";
+import { useGroupContext } from "../../context/GroupStateContext.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useMobileView } from "../../context/MobileViewContext.jsx";
 import Avatar from "../../components/Avatar.jsx";
 
 function GroupItem({ group }) {

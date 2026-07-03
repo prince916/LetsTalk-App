@@ -1,12 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { useAuth } from "./AuthProvider.jsx";
-import { useSocketContext } from "./SocketContext.jsx";
-
-const GroupContext = createContext();
-
-export const useGroupContext = () => {
-  return useContext(GroupContext);
-};
+import { useEffect, useState } from "react";
+import { GroupContext } from "./GroupStateContext.jsx";
+import { useSocketContext } from "./SocketStateContext.jsx";
 
 export const GroupProvider = ({ children }) => {
   const [selectedGroup, setSelectedGroup] = useState(null);
@@ -15,7 +9,6 @@ export const GroupProvider = ({ children }) => {
   const [groupOnlineUsers, setGroupOnlineUsers] = useState([]);
   const [typingUsers, setTypingUsers] = useState({});
   const [loading, setLoading] = useState(false);
-  const [authUser] = useAuth();
   const { socket } = useSocketContext();
 
   // Socket listeners for group events
@@ -28,12 +21,12 @@ export const GroupProvider = ({ children }) => {
     });
 
     // Listen for user joined group
-    socket.on("userJoinedGroup", ({ userId, onlineUsers }) => {
+    socket.on("userJoinedGroup", ({ onlineUsers }) => {
       setGroupOnlineUsers(onlineUsers || []);
     });
 
     // Listen for user left group
-    socket.on("userLeftGroup", ({ userId, onlineUsers }) => {
+    socket.on("userLeftGroup", ({ onlineUsers }) => {
       setGroupOnlineUsers(onlineUsers || []);
     });
 

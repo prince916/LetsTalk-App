@@ -1,11 +1,8 @@
-import React, { createContext, useContext, useState } from "react";
-import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode"; // ✅ handles real JWTs safely
-
-export const AuthContext = createContext();
+import { useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext.jsx";
+import apiClient from "./axiosConfig.js";
 
 const getInitialAuthUser = () => {
-  // Try localStorage first
   try {
     const storedAuthUser = localStorage.getItem("ChatApp");
     if (storedAuthUser) {
@@ -15,33 +12,54 @@ const getInitialAuthUser = () => {
     console.warn("Failed to parse stored auth user", error);
   }
 
-  // Then try cookie
-  try {
-    const jwtToken = Cookies.get("jwt");
-    if (jwtToken) {
-      // If cookie looks like JSON, parse it
-      if (jwtToken.startsWith("{")) {
-        return JSON.parse(jwtToken);
-      }
-      // Otherwise, decode as a real JWT
-      return jwtDecode(jwtToken);
-    }
-  } catch (error) {
-    console.warn("Failed to decode jwt cookie auth user", error);
-  }
-
-  return undefined;
+  return null;
 };
 
 export const AuthProvider = ({ children }) => {
-  // ✅ Lazy initialization with function call
   const [authUser, setAuthUser] = useState(() => getInitialAuthUser());
+  const [authReady, setAuthReady] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const validateSession = async () => {
+      if (!authUser?.user?._id) {
+        if (!isCancelled) {
+          setAuthReady(true);
+        }
+        return;
+      }
+
+      try {
+        const response = await apiClient.get("/api/user/session");
+        const sessionUser = { user: response.data.user };
+
+        if (!isCancelled) {
+          localStorage.setItem("ChatApp", JSON.stringify(sessionUser));
+          setAuthUser(sessionUser);
+        }
+      } catch {
+        if (!isCancelled) {
+          localStorage.removeItem("ChatApp");
+          setAuthUser(null);
+        }
+      } finally {
+        if (!isCancelled) {
+          setAuthReady(true);
+        }
+      }
+    };
+
+    validateSession();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [authUser?.user?._id]);
 
   return (
-    <AuthContext.Provider value={[authUser, setAuthUser]}>
+    <AuthContext.Provider value={[authUser, setAuthUser, authReady]}>
       {children}
     </AuthContext.Provider>
   );
 };
-
-export const useAuth = () => useContext(AuthContext);

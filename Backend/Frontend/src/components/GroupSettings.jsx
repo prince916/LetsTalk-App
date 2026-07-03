@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useGroupContext } from "../context/GroupContext.jsx";
+import { useState } from "react";
+import { useGroupContext } from "../context/GroupStateContext.jsx";
 import useGroupActions from "../context/useGroupActions.js";
 import useGroup from "../statemanage/useGroup.js";
-import { MdEdit, MdDelete, MdLogout } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import toast from "react-hot-toast";
 
 function GroupSettings() {

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
-import { useGroupContext } from "./GroupContext.jsx";
+import { useGroupContext } from "./GroupStateContext.jsx";
 
 const useCreateGroup = () => {
   const [loading, setLoading] = useState(false);

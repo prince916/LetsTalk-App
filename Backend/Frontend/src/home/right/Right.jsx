@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Chatuser from "./Chatuser.jsx";
 import Messages from "./Messages.jsx";
 import Type from "./Type.jsx";
 import GroupChatInterface from "../../components/GroupChatInterface.jsx";
 import useConversation from "../../statemanage/useConversation.js";
 import useGroup from "../../statemanage/useGroup.js";
-import { useAuth } from "../../context/AuthProvider.jsx";
-import { useMobileView } from "../../App.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { useMobileView } from "../../context/MobileViewContext.jsx";
 
 function Right() {
   const { selectedConversation, setSelectedConversation } = useConversation();
@@ -21,7 +21,7 @@ function Right() {
   }
 
   return (
-    <div className="flex h-dvh min-h-dvh w-full min-w-0 flex-col bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_32%),linear-gradient(135deg,_#020617_0%,_#0f172a_55%,_#111827_100%)] text-slate-200">
+    <div className="flex h-dvh min-h-dvh w-full min-w-0 flex-col bg-[radial-gradient(circle_at_top,rgba(56,189,248,0.12),transparent_32%),linear-gradient(135deg,#020617_0%,#0f172a_55%,#111827_100%)] text-slate-200">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (

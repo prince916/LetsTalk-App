@@ -9,6 +9,7 @@
     "dev": "nodemon index.js",
     "build": "npm install && npm install --prefix Frontend && npm run build --prefix Frontend",
     "test": "jest --detectOpenHandles --runInBand",
+    "test:flow": "jest tests/chat.flow.integration.test.js --runInBand",
     "test:watch": "jest --watch --runInBand",
     "test:coverage": "jest --coverage --runInBand"
   },

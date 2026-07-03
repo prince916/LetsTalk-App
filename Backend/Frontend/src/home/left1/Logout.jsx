@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { TbLogout2 } from "react-icons/tb";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -9,7 +9,7 @@ function Logout() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/logout");
+      await axios.post("/api/user/logout");
       localStorage.removeItem("ChatApp");
       Cookies.remove("jwt");
       setLoading(false);

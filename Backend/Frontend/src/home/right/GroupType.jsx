@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IoSend } from "react-icons/io5";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdClose, MdImage } from "react-icons/md";
@@ -6,7 +6,7 @@ import EmojiPicker from "emoji-picker-react";
 import useSendGroupMessage from "../../context/useSendGroupMessage.js";
 import useGroupSocket from "../../context/useGroupSocket.js";
 import useGroup from "../../statemanage/useGroup.js";
-import { useAuth } from "../../context/AuthProvider.jsx";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function GroupType() {
   const [message, setMessage] = useState("");

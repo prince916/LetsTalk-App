@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import apiClient from "./axiosConfig.js";
-import { useAuth } from "./AuthProvider.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 function useGetAllUsers() {
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [authUser] = useAuth();
+  const userId = authUser?.user?._id;
   
   useEffect(() => {
-    // Only fetch if user is authenticated
-    if (!authUser?.user?._id) {
-      setAllUsers([]);
-      setLoading(false);
+    if (!userId) {
       return;
     }
 
+    let isCancelled = false;
+
     const getUsers = async () => {
       setLoading(true);
+
       try {
         const token = Cookies.get("jwt");
         const response = await apiClient.get("/api/user/allUsers", {
@@ -26,23 +27,31 @@ function useGetAllUsers() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAllUsers(response.data);
-        setLoading(false);
+
+        if (!isCancelled) {
+          setAllUsers(response.data);
+        }
       } catch (error) {
         console.error("Error in useGetAllUsers:", error);
-        setLoading(false);
-        
-        // Show error toast for failed requests
-        if (error.response?.status === 401) {
+
+        if (!isCancelled && error.response?.status === 401) {
           toast.error("Session expired. Please login again.");
-        } else {
+        } else if (!isCancelled) {
           toast.error("Failed to load users. Please try again.");
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false);
         }
       }
     };
     
     getUsers();
-  }, [authUser?.user?._id]); // Only depend on userId, not authUser object
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [userId]);
   
   return [allUsers, loading];
 }

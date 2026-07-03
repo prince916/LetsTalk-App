@@ -6,12 +6,19 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_BACKEND_URL;
   }
   
-  // In production, use the same origin
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+  if (typeof window !== "undefined") {
+    const isLocalHost = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+    if (isLocalHost) {
+      // In local development, use the Vite proxy so auth cookies stay on the same origin.
+      return "";
+    }
+
+    // In production, use the same origin.
     return window.location.origin;
   }
-  
-  // Development: default to localhost:5002
+
+  // Non-browser fallback
   return "http://localhost:5002";
 };
 

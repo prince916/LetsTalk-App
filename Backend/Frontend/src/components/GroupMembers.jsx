@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useGroupContext } from "../context/GroupContext.jsx";
+import { useState } from "react";
+import { useGroupContext } from "../context/GroupStateContext.jsx";
 import useGroupMembers from "../context/useGroupMembers.js";
 import useGetAllUsers from "../context/useGetAllUsers.jsx";
 import { MdClose, MdAdd } from "react-icons/md";
@@ -21,8 +21,6 @@ function GroupMembers() {
     (m) =>
       m.userId._id === authUser.user._id && m.role === "admin"
   );
-
-  const isCreator = selectedGroup?.createdBy === authUser.user._id;
 
   const availableUsers = allUsers.filter(
     (user) =>

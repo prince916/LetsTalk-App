@@ -1,4 +1,3 @@
-import React from "react";
 
 const PALETTES = [
   "from-sky-500 via-cyan-500 to-blue-600",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import useCreateGroup from "../context/useCreateGroup.js";
 import { MdClose } from "react-icons/md";
 import toast from "react-hot-toast";

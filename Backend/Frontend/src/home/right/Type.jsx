@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoSend } from "react-icons/io5";
 import { BsEmojiSmile } from "react-icons/bs";
 import { MdClose, MdImage } from "react-icons/md";

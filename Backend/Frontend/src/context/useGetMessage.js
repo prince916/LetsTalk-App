@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useConversation from "../statemanage/useConversation.js";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import apiClient from "./axiosConfig.js";
-import { useAuth } from "./AuthProvider.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 const useGetMessage = () => {
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const useGetMessage = () => {
     };
 
     getMessages();
-  }, [selectedConversation?._id, authUser?.user?._id]); // Only depend on IDs, not functions
+  }, [selectedConversation?._id, authUser?.user?._id, setMessage]);
 
   return { loading, messages };
 };

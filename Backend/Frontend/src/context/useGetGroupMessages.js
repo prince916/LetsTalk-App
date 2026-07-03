@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import toast from "react-hot-toast";
 import apiClient from "./axiosConfig.js";
 import useGroup from "../statemanage/useGroup.js";
-import { useAuth } from "./AuthProvider.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 const useGetGroupMessages = () => {
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ const useGetGroupMessages = () => {
     };
 
     getGroupMessages();
-  }, [selectedGroup?._id, authUser?.user?._id]); // Only depend on IDs, not functions
+  }, [selectedGroup?._id, authUser?.user?._id, setGroupMessages]);
 
   return { loading, groupMessages };
 };

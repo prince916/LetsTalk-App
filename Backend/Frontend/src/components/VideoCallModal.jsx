@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { MdCallEnd, MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
-import { useCallContext } from "../context/CallContext.jsx";
+import { useCallContext } from "../context/CallStateContext.jsx";
 
 function VideoCallModal() {
   const {

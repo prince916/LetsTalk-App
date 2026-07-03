@@ -1,7 +1,6 @@
-﻿import React from "react";
-import useConversation from "../../statemanage/useConversation.js";
-import { useSocketContext } from "../../context/SocketContext.jsx";
-import { useMobileView } from "../../App.jsx";
+﻿import useConversation from "../../statemanage/useConversation.js";
+import { useSocketContext } from "../../context/SocketStateContext.jsx";
+import { useMobileView } from "../../context/MobileViewContext.jsx";
 import Avatar from "../../components/Avatar.jsx";
 
 function User({ user }) {

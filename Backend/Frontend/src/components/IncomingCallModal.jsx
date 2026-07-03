@@ -1,6 +1,5 @@
-import React from "react";
 import { MdCall, MdCallEnd } from "react-icons/md";
-import { useCallContext } from "../context/CallContext.jsx";
+import { useCallContext } from "../context/CallStateContext.jsx";
 
 function IncomingCallModal() {
   const { incomingCall, answerCall, rejectCall } = useCallContext();

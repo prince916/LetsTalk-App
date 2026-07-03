@@ -45,7 +45,7 @@ export const signup = async (req, res) => {
 
     await newUser.save();
 
-    createTokenAndSaveCookie(newUser._id, res);
+    createTokenAndSaveCookie(newUser._id, res, req);
 
     res.status(201).json({
       message: "User created successfully",
@@ -53,7 +53,7 @@ export const signup = async (req, res) => {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        profilePicture: newUser.profilePicture, // Return relative path
+        profilePicture: getPublicFileUrl(req, newUser.profilePicture),
       },
     });
   } catch (error) {
@@ -75,15 +75,15 @@ export const login = async (req, res) => {
       return res.status(400).json({ error: "Invalid email or password" });
     }
 
-    createTokenAndSaveCookie(user._id, res);
+    createTokenAndSaveCookie(user._id, res, req);
 
-    res.status(200).json({
+    res.status(201).json({
       message: "User logged in successfully",
       user: {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: user.profilePicture, // Return relative path
+        profilePicture: getPublicFileUrl(req, user.profilePicture),
       },
     });
   } catch (error) {
@@ -95,7 +95,7 @@ export const login = async (req, res) => {
 export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt");
-    res.status(200).json({ message: "User logged out successfully" });
+    res.status(201).json({ message: "User logged out successfully" });
   } catch (error) {
     console.error("Logout Error:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -109,12 +109,29 @@ export const allUsers = async (req, res) => {
 
     const normalizedUsers = filteredUsers.map((user) => ({
       ...user.toObject(),
-      // Return relative path - frontend will construct the full URL
+      profilePicture: getPublicFileUrl(req, user.profilePicture),
     }));
 
-    res.status(200).json(normalizedUsers);
+    res.status(201).json(normalizedUsers);
   } catch (error) {
     console.error("Error in allUsers Controller:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const session = async (req, res) => {
+  try {
+    res.status(200).json({
+      authenticated: true,
+      user: {
+        _id: req.user._id,
+        name: req.user.name,
+        email: req.user.email,
+        profilePicture: getPublicFileUrl(req, req.user.profilePicture),
+      },
+    });
+  } catch (error) {
+    console.error("Error in session Controller:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };

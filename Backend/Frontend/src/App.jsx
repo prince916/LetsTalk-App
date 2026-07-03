@@ -1,27 +1,30 @@
-import Loading from "./components/Loading.jsx";
 import Login from "./components/Login.jsx";
+import Loading from "./components/Loading.jsx";
 import Signup from "./components/Signup.jsx";
-import { useAuth } from "./context/AuthProvider.jsx";
-import Left from "./home/left/Left";
-import Logout from "./home/left1/Logout";
-import Right from "./home/right/Right";
-import toast, { Toaster } from "react-hot-toast";
+import { useAuth } from "./context/AuthContext.jsx";
+import { MobileViewContext } from "./context/MobileViewContext.jsx";
+import { Toaster } from "react-hot-toast";
 import { Routes, Route, Navigate } from "react-router-dom";
-import IncomingCallModal from "./components/IncomingCallModal.jsx";
-import VideoCallModal from "./components/VideoCallModal.jsx";
-import { createContext, useContext, useState } from "react";
+import { useState, lazy, Suspense } from "react";
 
-// Mobile view context: controls whether the list or chat is visible on small screens
-export const MobileViewContext = createContext(null);
-export const useMobileView = () => useContext(MobileViewContext);
+const Left = lazy(() => import("./home/left/Left"));
+const Logout = lazy(() => import("./home/left1/Logout"));
+const Right = lazy(() => import("./home/right/Right"));
+const IncomingCallModal = lazy(() => import("./components/IncomingCallModal.jsx"));
+const VideoCallModal = lazy(() => import("./components/VideoCallModal.jsx"));
 
 function App() {
-  const [authUser, setAuthUser] = useAuth();
+  const [authUser, , authReady] = useAuth();
   // "list" = show contacts sidebar; "chat" = show chat panel
   const [mobileView, setMobileView] = useState("list");
 
+  if (!authReady) {
+    return <Loading />;
+  }
+
   return (
     <>
+      <Suspense fallback={<Loading />}>
       <Routes>
         <Route
           path="/"
@@ -72,8 +75,11 @@ function App() {
           element={authUser ? <Navigate to={"/"} /> : <Signup />}
         />
       </Routes>
-      <IncomingCallModal />
-      <VideoCallModal />
+      </Suspense>
+      <Suspense fallback={null}>
+        <IncomingCallModal />
+        <VideoCallModal />
+      </Suspense>
       <Toaster />
     </>
   );

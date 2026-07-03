@@ -62,10 +62,12 @@ app.use("/api/group", groupRoute);
 
 // ------------ Code For Deployment -----------------
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+  const frontendDistPath = path.join(__dirname, "Frontend", "dist");
+
+  app.use(express.static(frontendDistPath));
   // Catch-all route for SPA - serve index.html for all unmatched routes
   app.use((req, res) => {
-    res.sendFile(path.join(__dirname, "../Frontend/dist", "index.html"));
+    res.sendFile(path.join(frontendDistPath, "index.html"));
   });
 }
 

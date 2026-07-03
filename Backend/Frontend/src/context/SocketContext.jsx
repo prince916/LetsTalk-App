@@ -1,8 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useAuth } from "./AuthProvider.jsx";
+import { useEffect, useMemo, useState } from "react";
+import { useAuth } from "./AuthContext.jsx";
 import io from "socket.io-client";
-
-const socketContext = createContext();
+import { SocketContext } from "./SocketStateContext.jsx";
 
 const getSocketUrl = () => {
   // Use Vite environment variable if available
@@ -21,41 +20,47 @@ const getSocketUrl = () => {
 
 const SOCKET_URL = getSocketUrl();
 
-export const useSocketContext = () => useContext(socketContext);
-
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [authUser] = useAuth();
+  const userId = authUser?.user?._id;
+
+  const socket = useMemo(() => {
+    if (!userId) {
+      return null;
+    }
+
+    return io(SOCKET_URL, {
+      query: { userId },
+      transports: ["websocket", "polling"],
+      withCredentials: true,
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 500,
+    });
+  }, [userId]);
 
   useEffect(() => {
-    if (authUser?.user?._id) {
-      const socketInstance = io(SOCKET_URL, {
-        query: { userId: authUser.user._id },
-        transports: ["websocket", "polling"], // ✅ keep both
-        withCredentials: true,
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 500,
-      });
-
-      setSocket(socketInstance);
-
-      socketInstance.on("getOnlineUsers", setOnlineUsers);
-
-      return () => {
-        socketInstance.off("getOnlineUsers");
-        socketInstance.disconnect();
-      };
-    } else if (socket) {
-      socket.disconnect();
-      setSocket(null);
+    if (!socket) {
+      return undefined;
     }
-  }, [authUser]);
+
+    const handleOnlineUsers = (users) => {
+      setOnlineUsers(users || []);
+    };
+
+    socket.on("getOnlineUsers", handleOnlineUsers);
+
+    return () => {
+      socket.off("getOnlineUsers", handleOnlineUsers);
+      socket.disconnect();
+      setOnlineUsers([]);
+    };
+  }, [socket]);
 
   return (
-    <socketContext.Provider value={{ socket, onlineUsers }}>
+    <SocketContext.Provider value={{ socket, onlineUsers: socket ? onlineUsers : [] }}>
       {children}
-    </socketContext.Provider>
+    </SocketContext.Provider>
   );
 };

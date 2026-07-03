@@ -4,6 +4,7 @@
  *   POST /api/user/signup
  *   POST /api/user/login
  *   POST /api/user/logout
+ *   GET  /api/user/session  (requires auth cookie)
  *   GET  /api/user/allUsers  (requires auth cookie)
  */
 const request = require("supertest");
@@ -191,6 +192,42 @@ describe("User API — POST /api/user/logout", () => {
     if (jwtCookie) {
       expect(jwtCookie).toMatch(/Expires=Thu, 01 Jan 1970|Max-Age=0|jwt=;/i);
     }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+describe("User API — GET /api/user/session", () => {
+  let userId;
+  let email;
+
+  beforeAll(async () => {
+    email = uniqueEmail();
+    const res = await request(app).post("/api/user/signup").send({
+      name: "Session User",
+      email,
+      password: "SessionPass123!",
+      confirmPassword: "SessionPass123!",
+    });
+
+    userId = res.body.user?._id;
+  });
+
+  test("✅ returns the authenticated user session", async () => {
+    const res = await request(app)
+      .get("/api/user/session")
+      .set("Cookie", authCookie(userId));
+
+    expect(res.status).toBe(200);
+    expect(res.body.authenticated).toBe(true);
+    expect(res.body.user._id).toBe(userId);
+    expect(res.body.user.email).toBe(email.toLowerCase());
+    expect(res.body.user).not.toHaveProperty("password");
+  });
+
+  test("❌ returns 401 when no auth cookie is provided", async () => {
+    const res = await request(app).get("/api/user/session");
+
+    expect(res.status).toBe(401);
   });
 });
 
