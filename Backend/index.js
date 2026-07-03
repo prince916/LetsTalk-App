@@ -4,10 +4,13 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import path from "path";
 import cors from "cors";
+import { fileURLToPath } from "url";
 import userRoute from "./routes/user.route.js";
 import messageRoute from "./routes/message.route.js";
 import groupRoute from "./routes/group.route.js";
 import { app, server } from "./SocketIO/server.js";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 dotenv.config();
 
@@ -24,6 +27,7 @@ const allowedOrigins = [
   "http://127.0.0.1:4001",
   "http://127.0.0.1:4002",
   "http://127.0.0.1:5002",
+  "https://letstalk-app.onrender.com",
 ];
 
 app.use(cors({
@@ -58,9 +62,9 @@ app.use("/api/group", groupRoute);
 
 // ------------ Code For Deployment -----------------
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("./Frontend/dist"));
-  app.get("/",(req, res) => {
-    res.sendFile(path.resolve(dirPath, "./Frontend/dist", "index.html"));
+  app.use(express.static(path.join(__dirname, "../Frontend/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../Frontend/dist", "index.html"));
   });
 }
 
