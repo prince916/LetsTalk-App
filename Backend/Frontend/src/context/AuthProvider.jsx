@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useState } from "react";
 import Cookies from "js-cookie";
+import { jwtDecode } from "jwt-decode"; // ✅ handles real JWTs safely
 
 export const AuthContext = createContext();
 
 const getInitialAuthUser = () => {
+  // Try localStorage first
   try {
     const storedAuthUser = localStorage.getItem("ChatApp");
     if (storedAuthUser) {
@@ -13,20 +15,27 @@ const getInitialAuthUser = () => {
     console.warn("Failed to parse stored auth user", error);
   }
 
+  // Then try cookie
   try {
     const jwtToken = Cookies.get("jwt");
-    if (jwtToken && jwtToken.startsWith("{")) {
-      return JSON.parse(jwtToken);
+    if (jwtToken) {
+      // If cookie looks like JSON, parse it
+      if (jwtToken.startsWith("{")) {
+        return JSON.parse(jwtToken);
+      }
+      // Otherwise, decode as a real JWT
+      return jwtDecode(jwtToken);
     }
   } catch (error) {
-    console.warn("Failed to parse jwt cookie auth user", error);
+    console.warn("Failed to decode jwt cookie auth user", error);
   }
 
   return undefined;
 };
 
 export const AuthProvider = ({ children }) => {
-  const [authUser, setAuthUser] = useState(getInitialAuthUser);
+  // ✅ Lazy initialization with function call
+  const [authUser, setAuthUser] = useState(() => getInitialAuthUser());
 
   return (
     <AuthContext.Provider value={[authUser, setAuthUser]}>

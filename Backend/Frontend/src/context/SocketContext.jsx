@@ -1,31 +1,32 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useAuth } from "./AuthProvider.jsx";
 import io from "socket.io-client";
+
 const socketContext = createContext();
 
 const getSocketUrl = () => {
   if (typeof window === "undefined") {
-    return "http://localhost:5002";
+    return "http://localhost:5002"; // SSR fallback
   }
 
   if (import.meta.env.VITE_SOCKET_URL) {
     return import.meta.env.VITE_SOCKET_URL;
   }
 
-  const { protocol, hostname, port } = window.location;
+  const { hostname, protocol } = window.location;
   if (hostname === "localhost" || hostname === "127.0.0.1") {
     return "http://localhost:5002";
   }
 
-  return "https://letstalk-app.onrender.com";
+  // ✅ Use wss:// if site is served over https
+  return protocol === "https:"
+    ? "wss://letstalk-app.onrender.com"
+    : "http://letstalk-app.onrender.com";
 };
 
 const SOCKET_URL = getSocketUrl();
 
-// it is a hook.
-export const useSocketContext = () => {
-  return useContext(socketContext);
-};
+export const useSocketContext = () => useContext(socketContext);
 
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
@@ -35,28 +36,24 @@ export const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (authUser?.user?._id) {
       const socketInstance = io(SOCKET_URL, {
-        query: {
-          userId: authUser.user._id,
-        },
-        transports: ["websocket", "polling"],
+        query: { userId: authUser.user._id },
+        transports: ["websocket", "polling"], // ✅ keep both
+        withCredentials: true,
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 500,
       });
 
       setSocket(socketInstance);
-      socketInstance.on("getOnlineUsers", (users) => {
-        setOnlineUsers(users);
-      });
+
+      socketInstance.on("getOnlineUsers", setOnlineUsers);
 
       return () => {
         socketInstance.off("getOnlineUsers");
         socketInstance.disconnect();
       };
-    }
-
-    if (socket) {
-      socket.close();
+    } else if (socket) {
+      socket.disconnect();
       setSocket(null);
     }
   }, [authUser]);

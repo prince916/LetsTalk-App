@@ -2,10 +2,21 @@ import React from "react";
 import GroupItem from "./GroupItem.jsx";
 import { useGroupContext } from "../../context/GroupContext.jsx";
 import useGetAllGroups from "../../context/useGetAllGroups.js";
+import Loading from "../../components/Loading.jsx";
 
 function Groups() {
   const { groups, loading } = useGroupContext();
   useGetAllGroups();
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-2 px-2">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="h-16 bg-slate-800/50 rounded-lg animate-pulse"></div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -16,9 +27,7 @@ function Groups() {
         className="py-2 flex-1 overflow-y-auto"
         style={{ maxHeight: "calc(84vh - 10vh)" }}
       >
-        {loading ? (
-          <div className="text-center py-4 text-gray-400">Loading groups...</div>
-        ) : groups.length > 0 ? (
+        {groups && groups.length > 0 ? (
           groups.map((group) => <GroupItem key={group._id} group={group} />)
         ) : (
           <div className="text-center py-4 text-gray-400">

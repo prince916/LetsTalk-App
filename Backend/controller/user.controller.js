@@ -6,10 +6,11 @@ export const getPublicFileUrl = (req, filePath) => {
   if (!filePath) return "";
   if (/^https?:\/\//i.test(filePath)) return filePath;
 
-  const configuredBaseUrl = process.env.BACKEND_URL || process.env.APP_URL || process.env.CLIENT_URL;
-  const forwardedProto = req.get?.("x-forwarded-proto")?.split(",")[0]?.trim();
-  const forwardedHost = req.get?.("x-forwarded-host")?.split(",")[0]?.trim();
-  const host = forwardedHost || req.get?.("host");
+  const configuredBaseUrl =
+    process.env.BACKEND_URL || process.env.APP_URL || process.env.CLIENT_URL;
+  const forwardedProto = req.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  const forwardedHost = req.get("x-forwarded-host")?.split(",")[0]?.trim();
+  const host = forwardedHost || req.get("host");
   const protocol = forwardedProto || req.protocol || "http";
   const baseUrl = configuredBaseUrl || `${protocol}://${host}`;
   const normalizedBaseUrl = baseUrl.replace(/\/$/, "");
@@ -24,59 +25,54 @@ export const signup = async (req, res) => {
     if (password !== confirmPassword) {
       return res.status(400).json({ error: "Passwords do not match" });
     }
-    const user = await User.findOne({ email });
-    if (user) {
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return res.status(400).json({ error: "User already registered" });
     }
-    // Hashing the password
+
     const hashPassword = await bcrypt.hash(password, 10);
     const profilePicture = req.file
-      ? getPublicFileUrl(req, `/uploads/profiles/${req.file.filename}`)
+      ? `/uploads/profiles/${req.file.filename}` // store relative path only
       : "";
 
-    const newUser = await new User({
+    const newUser = new User({
       name,
       email,
       password: hashPassword,
       profilePicture,
     });
+
     await newUser.save();
-    if (newUser) {
-      createTokenAndSaveCookie(newUser._id, res);
-      res.status(201).json({
-        message: "User created successfully",
-        user: {
-          _id: newUser._id,
-          name: newUser.name,
-          email: newUser.email,
-          profilePicture: newUser.profilePicture,
-        },
-      });
-    }
+
+    createTokenAndSaveCookie(newUser._id, res);
+
+    res.status(201).json({
+      message: "User created successfully",
+      user: {
+        _id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        profilePicture: getPublicFileUrl(req, newUser.profilePicture),
+      },
+    });
   } catch (error) {
-    console.log(error);
+    console.error("Signup Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const login = async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
-
-    // Check if user exists first
     if (!user) {
-      return res.status(400).json({
-        error: "Invalid email or password",
-      });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) {
-      return res.status(400).json({
-        error: "Invalid email or password",
-      });
+      return res.status(400).json({ error: "Invalid email or password" });
     }
 
     createTokenAndSaveCookie(user._id, res);
@@ -87,22 +83,21 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: getPublicFileUrl(req, user.profilePicture || ""),
+        profilePicture: getPublicFileUrl(req, user.profilePicture),
       },
     });
   } catch (error) {
     console.error("Login Error:", error);
-    res.status(500).json({
-      error: "Internal server error",
-    });
+    res.status(500).json({ error: "Internal server error" });
   }
 };
+
 export const logout = async (req, res) => {
   try {
     res.clearCookie("jwt");
-    res.status(201).json({ message: "User logged out successfully" });
+    res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    console.log(error);
+    console.error("Logout Error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -110,15 +105,16 @@ export const logout = async (req, res) => {
 export const allUsers = async (req, res) => {
   try {
     const loggedInUser = req.user._id;
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUser },
-    }).select("-password");
+    const filteredUsers = await User.find({ _id: { $ne: loggedInUser } }).select("-password");
+
     const normalizedUsers = filteredUsers.map((user) => ({
       ...user.toObject(),
-      profilePicture: getPublicFileUrl(req, user.profilePicture || ""),
+      profilePicture: getPublicFileUrl(req, user.profilePicture),
     }));
-    res.status(201).json(normalizedUsers);
+
+    res.status(200).json(normalizedUsers);
   } catch (error) {
-    console.log("Error in allUsers Controller: " + error);
+    console.error("Error in allUsers Controller:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

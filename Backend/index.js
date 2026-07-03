@@ -13,10 +13,30 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cookieParser());
+
+// CORS configuration - allow multiple localhost ports for development
+const allowedOrigins = [
+  process.env.CLIENT_URL || "http://localhost:4001",
+  "http://localhost:4002",
+  "http://localhost:4003",
+  "http://localhost:5002",
+  "http://localhost:3000",
+  "http://127.0.0.1:4001",
+  "http://127.0.0.1:4002",
+  "http://127.0.0.1:5002",
+];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:4001",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
 app.use("/uploads", express.static("uploads"));
 
 
