@@ -63,7 +63,8 @@ app.use("/api/group", groupRoute);
 // ------------ Code For Deployment -----------------
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../Frontend/dist")));
-  app.get("*", (req, res) => {
+  // Catch-all route for SPA - serve index.html for all unmatched routes
+  app.use((req, res) => {
     res.sendFile(path.join(__dirname, "../Frontend/dist", "index.html"));
   });
 }
