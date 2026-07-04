@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+const PALETTES = [
   "from-sky-500 via-cyan-500 to-blue-600",
   "from-violet-500 via-fuchsia-500 to-purple-600",
   "from-emerald-500 via-teal-500 to-green-600",
