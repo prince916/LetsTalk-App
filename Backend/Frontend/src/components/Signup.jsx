@@ -53,126 +53,126 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_35%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md overflow-hidden rounded-3xl lg:rounded-4xl border border-slate-700/50 bg-slate-900/70 shadow-2xl shadow-black/60 backdrop-blur-md max-h-[90vh] overflow-y-auto">
-        <div className="p-6 sm:p-8 lg:p-12">
+    <div className="min-h-screen w-full flex items-center justify-center bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_35%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] px-3 py-6 sm:px-4 sm:py-8 md:px-6 lg:px-8">
+      <div className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg overflow-hidden rounded-2xl sm:rounded-3xl lg:rounded-4xl border border-slate-700/50 bg-slate-900/70 shadow-2xl shadow-black/60 backdrop-blur-md">
+        <div className="p-4 sm:p-6 md:p-8 lg:p-12 max-h-[95vh] overflow-y-auto scrollbar-hide">
           {/* Header Section */}
-          <div className="mb-10 text-center">
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-sky-400/80">Create account</p>
-            <h1 className="mt-4 text-2xl sm:text-3xl font-bold text-white">Join LetsTalk</h1>
-            <p className="mt-2 text-sm text-slate-400">Connect with friends and groups instantly.</p>
+          <div className="mb-6 sm:mb-8 md:mb-10 text-center">
+            <p className="text-xs sm:text-xs md:text-sm font-bold uppercase tracking-widest text-sky-400/80">Create account</p>
+            <h1 className="mt-2 sm:mt-3 md:mt-4 text-xl sm:text-2xl md:text-3xl font-bold text-white">Join LetsTalk</h1>
+            <p className="mt-1 sm:mt-2 md:mt-2 text-xs sm:text-sm text-slate-400">Connect with friends and groups instantly.</p>
           </div>
 
           {/* Form Section */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
             {/* Full Name Field */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label htmlFor="name" className="block text-xs font-semibold uppercase tracking-wide text-slate-300">
                 Full Name
               </label>
               <div className="relative flex items-center">
-                <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-5 w-5 shrink-0 text-slate-500">
+                <label className="input input-bordered flex h-10 sm:h-11 md:h-12 w-full items-center gap-3 rounded-xl sm:rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-slate-500">
                     <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
                   </svg>
-                  <input id="name" type="text" className="grow bg-transparent text-sm placeholder:text-slate-500 focus:outline-none" placeholder="John Doe" {...register("name", { required: "Full name is required" })} />
+                  <input id="name" type="text" className="grow bg-transparent text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none" placeholder="John Doe" {...register("name", { required: "Full name is required" })} />
                 </label>
               </div>
               {errors.name && (
-                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1">
+                  <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  {errors.name.message}
+                  <span className="line-clamp-1">{errors.name.message}</span>
                 </p>
               )}
             </div>
 
             {/* Email Field */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wide text-slate-300">
                 Email Address
               </label>
               <div className="relative flex items-center">
-                <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-5 w-5 shrink-0 text-slate-500">
+                <label className="input input-bordered flex h-10 sm:h-11 md:h-12 w-full items-center gap-3 rounded-xl sm:rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-slate-500">
                     <path d="M2.5 3A1.5 1.5 0 0 0 1 4.5v.793c.026.009.051.02.076.032L7.674 8.51c.206.1.446.1.652 0l6.598-3.185A.755.755 0 0 1 15 5.293V4.5A1.5 1.5 0 0 0 13.5 3h-11Z" />
                     <path d="M15 6.954 8.978 9.86a2.25 2.25 0 0 1-1.956 0L1 6.954V11.5A1.5 1.5 0 0 0 2.5 13h11a1.5 1.5 0 0 0 1.5-1.5V6.954Z" />
                   </svg>
-                  <input id="email" type="email" className="grow bg-transparent text-sm placeholder:text-slate-500 focus:outline-none" placeholder="you@example.com" {...register("email", { required: "Email is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Please enter a valid email" } })} />
+                  <input id="email" type="email" className="grow bg-transparent text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none" placeholder="you@example.com" {...register("email", { required: "Email is required", pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Please enter a valid email" } })} />
                 </label>
               </div>
               {errors.email && (
-                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1">
+                  <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  {errors.email.message}
+                  <span className="line-clamp-1">{errors.email.message}</span>
                 </p>
               )}
             </div>
 
             {/* Password Field */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label htmlFor="password" className="block text-xs font-semibold uppercase tracking-wide text-slate-300">
                 Password
               </label>
               <div className="relative flex items-center">
-                <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-5 w-5 shrink-0 text-slate-500">
+                <label className="input input-bordered flex h-10 sm:h-11 md:h-12 w-full items-center gap-3 rounded-xl sm:rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-slate-500">
                     <path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" />
                   </svg>
-                  <input id="password" type="password" className="grow bg-transparent text-sm placeholder:text-slate-500 focus:outline-none" placeholder="••••••••" {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })} />
+                  <input id="password" type="password" className="grow bg-transparent text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none" placeholder="••••••••" {...register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })} />
                 </label>
               </div>
               {errors.password && (
-                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1">
+                  <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  {errors.password.message}
+                  <span className="line-clamp-1">{errors.password.message}</span>
                 </p>
               )}
             </div>
 
             {/* Confirm Password Field */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label htmlFor="confirmPassword" className="block text-xs font-semibold uppercase tracking-wide text-slate-300">
                 Confirm Password
               </label>
               <div className="relative flex items-center">
-                <label className="input input-bordered flex h-12 w-full items-center gap-3 rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-5 w-5 shrink-0 text-slate-500">
+                <label className="input input-bordered flex h-10 sm:h-11 md:h-12 w-full items-center gap-3 rounded-xl sm:rounded-2xl border-slate-600/50 bg-slate-800/40 text-slate-100 transition focus-within:border-sky-400/70 focus-within:bg-slate-800/60 hover:border-slate-500/80">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="h-4 w-4 sm:h-5 sm:w-5 shrink-0 text-slate-500">
                     <path fillRule="evenodd" d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z" clipRule="evenodd" />
                   </svg>
-                  <input id="confirmPassword" type="password" className="grow bg-transparent text-sm placeholder:text-slate-500 focus:outline-none" placeholder="••••••••" {...register("confirmPassword", { required: "Please confirm your password", validate: validatePasswordMatch })} />
+                  <input id="confirmPassword" type="password" className="grow bg-transparent text-xs sm:text-sm placeholder:text-slate-500 focus:outline-none" placeholder="••••••••" {...register("confirmPassword", { required: "Please confirm your password", validate: validatePasswordMatch })} />
                 </label>
               </div>
               {errors.confirmPassword && (
-                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1.5">
-                  <svg className="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20">
+                <p className="text-xs font-semibold text-rose-400/90 flex items-center gap-1">
+                  <svg className="h-3 w-3 sm:h-3.5 sm:w-3.5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                   </svg>
-                  {errors.confirmPassword.message}
+                  <span className="line-clamp-1">{errors.confirmPassword.message}</span>
                 </p>
               )}
             </div>
 
             {/* Profile Picture Field */}
-            <div className="space-y-2">
+            <div className="space-y-1.5 sm:space-y-2">
               <label className="block text-xs font-semibold uppercase tracking-wide text-slate-300">
                 Profile Picture <span className="font-normal text-slate-500">(optional)</span>
               </label>
               <div className="relative">
-                <div className="rounded-2xl border border-slate-600/50 bg-slate-800/40 p-4 transition hover:border-slate-500/80">
-                  <input type="file" accept="image/*" onChange={handleImageChange} className="file-input file-input-sm w-full text-sm text-slate-300 cursor-pointer" />
-                  <p className="mt-2 text-xs text-slate-400">Supported formats: JPG, PNG, GIF (Max 5MB)</p>
+                <div className="rounded-xl sm:rounded-2xl border border-slate-600/50 bg-slate-800/40 p-3 sm:p-4 transition hover:border-slate-500/80">
+                  <input type="file" accept="image/*" onChange={handleImageChange} className="file-input file-input-sm w-full text-xs sm:text-sm text-slate-300 cursor-pointer" />
+                  <p className="mt-1.5 sm:mt-2 text-xs text-slate-400">Supported: JPG, PNG, GIF (Max 5MB)</p>
                 </div>
                 {imagePreview && (
-                  <div className="mt-3 flex items-center gap-3 rounded-xl bg-sky-400/10 border border-sky-400/30 p-3">
-                    <img src={imagePreview} alt="Preview" className="h-12 w-12 rounded-full object-cover ring-2 ring-sky-400/40" />
-                    <div>
-                      <p className="text-sm font-semibold text-sky-400">Profile picture selected ✓</p>
+                  <div className="mt-2 sm:mt-3 flex items-center gap-2 sm:gap-3 rounded-lg sm:rounded-xl bg-sky-400/10 border border-sky-400/30 p-2 sm:p-3">
+                    <img src={imagePreview} alt="Preview" className="h-10 w-10 sm:h-12 sm:w-12 shrink-0 rounded-full object-cover ring-2 ring-sky-400/40" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs sm:text-sm font-semibold text-sky-400 truncate">Profile picture selected ✓</p>
                       <p className="text-xs text-slate-400">Ready to upload</p>
                     </div>
                   </div>
@@ -181,16 +181,16 @@ function Signup() {
             </div>
 
             {/* Submit Button */}
-            <button type="submit" className="btn h-12 w-full rounded-2xl border-0 bg-linear-to-r from-sky-500 to-blue-600 text-white font-semibold shadow-lg shadow-sky-500/25 transition duration-300 hover:from-sky-400 hover:to-blue-500 hover:shadow-blue-500/40 active:scale-95 mt-6">
+            <button type="submit" className="btn h-10 sm:h-11 md:h-12 w-full rounded-xl sm:rounded-2xl border-0 bg-linear-to-r from-sky-500 to-blue-600 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-sky-500/25 transition duration-300 hover:from-sky-400 hover:to-blue-500 hover:shadow-blue-500/40 active:scale-95 mt-4 sm:mt-5 md:mt-6">
               Create Account
             </button>
           </form>
 
           {/* Footer Link */}
-          <div className="mt-8 text-center">
-            <p className="text-sm text-slate-400">
+          <div className="mt-6 sm:mt-7 md:mt-8 text-center">
+            <p className="text-xs sm:text-sm text-slate-400">
               Already have an account?
-              <Link to="/login" className="ml-1.5 font-semibold text-sky-400 transition hover:text-sky-300 hover:underline">
+              <Link to="/login" className="ml-1 sm:ml-1.5 font-semibold text-sky-400 transition hover:text-sky-300 hover:underline">
                 Login here
               </Link>
             </p>

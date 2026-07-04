@@ -28,6 +28,16 @@ body {
   box-sizing: border-box;
 }
 
+/* Hide scrollbar while keeping scroll functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
 ::selection {
   background: rgba(56, 189, 248, 0.35);
   color: white;
