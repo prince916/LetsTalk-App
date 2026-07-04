@@ -17,14 +17,22 @@ function VideoCallModal() {
   const remoteVideoRef = useRef(null);
 
   useEffect(() => {
-    if (localVideoRef.current) {
+    if (localVideoRef.current && localStream) {
+      console.log("Setting local video stream", localStream.getTracks().length, "tracks");
       localVideoRef.current.srcObject = localStream;
+      localVideoRef.current.play().catch((error) => {
+        console.error("Error playing local video:", error);
+      });
     }
   }, [localStream]);
 
   useEffect(() => {
-    if (remoteVideoRef.current) {
+    if (remoteVideoRef.current && remoteStream) {
+      console.log("Setting remote video stream", remoteStream.getTracks().length, "tracks");
       remoteVideoRef.current.srcObject = remoteStream;
+      remoteVideoRef.current.play().catch((error) => {
+        console.error("Error playing remote video:", error);
+      });
     }
   }, [remoteStream]);
 
@@ -47,6 +55,8 @@ function VideoCallModal() {
             ref={remoteVideoRef}
             autoPlay
             playsInline
+            muted={false}
+            controls={false}
             className="h-full w-full object-contain"
           />
         ) : (
@@ -59,17 +69,18 @@ function VideoCallModal() {
         )}
 
         <div className="absolute bottom-6 right-6 h-32 w-24 overflow-hidden rounded-lg border border-slate-700 bg-slate-900 sm:h-44 sm:w-32">
-          {localStream && !isCameraOff ? (
+          {localStream ? (
             <video
               ref={localVideoRef}
               autoPlay
               muted
               playsInline
+              controls={false}
               className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-xs text-gray-400">
-              Camera off
+              Starting camera...
             </div>
           )}
         </div>

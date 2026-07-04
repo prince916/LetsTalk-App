@@ -64,12 +64,33 @@ export const CallProvider = ({ children }) => {
       localStreamRef.current.getTracks().forEach((track) => track.stop());
     }
 
-    const stream = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    setLocalStream(stream);
-    return stream;
+    try {
+      console.log("Requesting media stream...");
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true,
+        },
+      });
+      console.log("Media stream obtained successfully:", stream.getTracks().length, "tracks");
+      setLocalStream(stream);
+      return stream;
+    } catch (error) {
+      console.error("Error accessing media:", error);
+      if (error.name === "NotAllowedError") {
+        alert("Camera/microphone permission denied. Please allow access and try again.");
+      } else if (error.name === "NotFoundError") {
+        alert("No camera or microphone found on your device.");
+      } else {
+        alert("Error accessing camera/microphone: " + error.message);
+      }
+      throw error;
+    }
   }, []);
 
   const createPeerConnection = useCallback(
@@ -85,7 +106,15 @@ export const CallProvider = ({ children }) => {
         }
       };
 
+      peerConnection.ontrack = (event) => {
+        console.log("Received remote track:", event.track.kind);
+        const incomingStream = event.streams?.[0] || new MediaStream([event.track]);
+        console.log("Setting remote stream with tracks:", incomingStream.getTracks().length);
+        setRemoteStream(incomingStream);
+      };
+
       peerConnection.addEventListener("track", (event) => {
+        console.log("Track event listener:", event.track.kind);
         const incomingStream = event.streams?.[0] || new MediaStream([event.track]);
         setRemoteStream(incomingStream);
       });
@@ -109,14 +138,19 @@ export const CallProvider = ({ children }) => {
       }
 
       try {
+        console.log("Starting video call to:", receiver.name);
         const stream = await getMediaStream();
+        console.log("Got local stream with tracks:", stream.getTracks().length);
+        
         const peerConnection = createPeerConnection(receiver._id);
         stream.getTracks().forEach((track) => {
+          console.log("Adding track:", track.kind);
           peerConnection.addTrack(track, stream);
         });
 
         const offer = await peerConnection.createOffer();
         await peerConnection.setLocalDescription(offer);
+        console.log("Created and set local description");
 
         setActiveCall({
           userId: receiver._id,
@@ -132,7 +166,7 @@ export const CallProvider = ({ children }) => {
           offer,
         });
       } catch (error) {
-        console.log("Error starting video call:", error);
+        console.error("Error starting video call:", error);
         cleanupCall();
       }
     },
@@ -140,22 +174,34 @@ export const CallProvider = ({ children }) => {
   );
 
   const answerCall = useCallback(async () => {
-    if (!socket || !authUser?.user || !incomingCall) return;
+    if (!socket || !authUser?.user || !incomingCall) {
+      console.error("Cannot answer call: missing socket, authUser, or incomingCall");
+      return;
+    }
 
     try {
+      console.log("Answering call from:", incomingCall.fromName);
       const stream = await getMediaStream();
+      console.log("Got local stream:", stream.getTracks().length, "tracks");
+      
       const peerConnection = createPeerConnection(incomingCall.from);
       stream.getTracks().forEach((track) => {
+        console.log("Adding track to peer connection:", track.kind);
         peerConnection.addTrack(track, stream);
       });
 
+      console.log("Setting remote description from offer");
       await peerConnection.setRemoteDescription(
         new RTCSessionDescription(incomingCall.offer)
       );
+      
+      console.log("Flushing pending ICE candidates");
       await flushPendingCandidates();
 
+      console.log("Creating answer");
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
+      console.log("Local description set");
 
       setActiveCall({
         userId: incomingCall.from,
@@ -165,13 +211,14 @@ export const CallProvider = ({ children }) => {
       });
       setIncomingCall(null);
 
+      console.log("Sending answer");
       socket.emit("answerCall", {
         to: incomingCall.from,
         from: authUser.user._id,
         answer,
       });
     } catch (error) {
-      console.log("Error answering video call:", error);
+      console.error("Error answering video call:", error);
       cleanupCall();
     }
   }, [
@@ -216,7 +263,9 @@ export const CallProvider = ({ children }) => {
     if (!socket) return;
 
     socket.on("incomingCall", (call) => {
+      console.log("Incoming call from:", call.fromName);
       if (activeCallRef.current || incomingCall) {
+        console.log("Already in call, rejecting");
         socket.emit("rejectCall", { to: call.from, reason: "busy" });
         return;
       }
@@ -225,30 +274,48 @@ export const CallProvider = ({ children }) => {
 
     socket.on("callAnswered", async ({ answer }) => {
       const peerConnection = peerConnectionRef.current;
-      if (!peerConnection) return;
+      if (!peerConnection) {
+        console.error("No peer connection when receiving answer");
+        return;
+      }
 
-      await peerConnection.setRemoteDescription(
-        new RTCSessionDescription(answer)
-      );
-      await flushPendingCandidates();
-      setActiveCall((prev) =>
-        prev ? { ...prev, status: "connected" } : prev
-      );
+      try {
+        console.log("Received answer, setting remote description");
+        await peerConnection.setRemoteDescription(
+          new RTCSessionDescription(answer)
+        );
+        console.log("Remote description set, flushing ICE candidates");
+        await flushPendingCandidates();
+        console.log("Call connected!");
+        setActiveCall((prev) =>
+          prev ? { ...prev, status: "connected" } : prev
+        );
+      } catch (error) {
+        console.error("Error setting remote description:", error);
+      }
     });
 
     socket.on("iceCandidate", async ({ candidate }) => {
       const peerConnection = peerConnectionRef.current;
       if (!peerConnection) {
+        console.log("No peer connection yet, queuing ICE candidate");
         pendingCandidatesRef.current.push(candidate);
         return;
       }
 
       if (!peerConnection.remoteDescription) {
+        console.log("Remote description not set yet, queuing ICE candidate");
         pendingCandidatesRef.current.push(candidate);
         return;
       }
 
-      await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+      try {
+        console.log("Adding ICE candidate");
+        await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+        console.log("ICE candidate added successfully");
+      } catch (error) {
+        console.error("Error adding ICE candidate:", error);
+      }
     });
 
     socket.on("callRejected", cleanupCall);
