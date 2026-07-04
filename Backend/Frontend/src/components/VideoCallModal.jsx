@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { MdCallEnd, MdMic, MdMicOff, MdVideocam, MdVideocamOff } from "react-icons/md";
 import { useCallContext } from "../context/CallStateContext.jsx";
 
@@ -15,26 +15,48 @@ function VideoCallModal() {
   } = useCallContext();
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
+  const [needsTap, setNeedsTap] = useState(false);
+
+  const tryPlay = useCallback((videoEl) => {
+    if (!videoEl) return;
+    videoEl.play().catch((err) => {
+      if (err.name === "NotAllowedError") {
+        // Autoplay blocked — show tap-to-play overlay
+        setNeedsTap(true);
+      } else {
+        console.error("Error playing video:", err);
+      }
+    });
+  }, []);
+
+  // Always keep srcObject in sync — video elements are always mounted
+  useEffect(() => {
+    const el = localVideoRef.current;
+    if (!el) return;
+    if (localStream) {
+      el.srcObject = localStream;
+      tryPlay(el);
+    } else {
+      el.srcObject = null;
+    }
+  }, [localStream, tryPlay]);
 
   useEffect(() => {
-    if (localVideoRef.current && localStream) {
-      console.log("Setting local video stream", localStream.getTracks().length, "tracks");
-      localVideoRef.current.srcObject = localStream;
-      localVideoRef.current.play().catch((error) => {
-        console.error("Error playing local video:", error);
-      });
+    const el = remoteVideoRef.current;
+    if (!el) return;
+    if (remoteStream) {
+      console.log("Setting remote stream, tracks:", remoteStream.getTracks().length);
+      el.srcObject = remoteStream;
+      tryPlay(el);
+    } else {
+      el.srcObject = null;
     }
-  }, [localStream]);
+  }, [remoteStream, tryPlay]);
 
-  useEffect(() => {
-    if (remoteVideoRef.current && remoteStream) {
-      console.log("Setting remote video stream", remoteStream.getTracks().length, "tracks");
-      remoteVideoRef.current.srcObject = remoteStream;
-      remoteVideoRef.current.play().catch((error) => {
-        console.error("Error playing remote video:", error);
-      });
-    }
-  }, [remoteStream]);
+  const handleTapToPlay = useCallback(() => {
+    setNeedsTap(false);
+    tryPlay(remoteVideoRef.current);
+  }, [tryPlay]);
 
   if (!activeCall) return null;
 
@@ -50,17 +72,29 @@ function VideoCallModal() {
       </div>
 
       <div className="relative flex flex-1 items-center justify-center bg-black">
-        {remoteStream ? (
-          <video
-            ref={remoteVideoRef}
-            autoPlay
-            playsInline
-            muted={false}
-            controls={false}
-            className="h-full w-full object-contain"
-          />
-        ) : (
-          <div className="text-center text-gray-300">
+        {/* Remote video — always in DOM so ref is always valid */}
+        <video
+          ref={remoteVideoRef}
+          autoPlay
+          playsInline
+          className={`h-full w-full object-contain ${remoteStream ? "" : "hidden"}`}
+        />
+
+        {/* Tap-to-play overlay (autoplay blocked by browser) */}
+        {needsTap && remoteStream && (
+          <button
+            type="button"
+            onClick={handleTapToPlay}
+            className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 text-white"
+          >
+            <span className="mb-2 text-4xl">▶</span>
+            <span className="text-sm">Tap to play</span>
+          </button>
+        )}
+
+        {/* Waiting placeholder when no remote stream */}
+        {!remoteStream && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-gray-300">
             <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-slate-700 text-3xl font-bold">
               {activeCall.name?.charAt(0).toUpperCase()}
             </div>
@@ -69,16 +103,15 @@ function VideoCallModal() {
         )}
 
         <div className="absolute bottom-6 right-6 h-32 w-24 overflow-hidden rounded-lg border border-slate-700 bg-slate-900 sm:h-44 sm:w-32">
-          {localStream ? (
-            <video
-              ref={localVideoRef}
-              autoPlay
-              muted
-              playsInline
-              controls={false}
-              className="h-full w-full object-cover"
-            />
-          ) : (
+          {/* Local video — always in DOM */}
+          <video
+            ref={localVideoRef}
+            autoPlay
+            muted
+            playsInline
+            className={`h-full w-full object-cover ${localStream ? "" : "hidden"}`}
+          />
+          {!localStream && (
             <div className="flex h-full items-center justify-center text-xs text-gray-400">
               Starting camera...
             </div>

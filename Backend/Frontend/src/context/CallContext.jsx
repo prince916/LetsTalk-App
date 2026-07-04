@@ -4,7 +4,25 @@ import { CallContext } from "./CallStateContext.jsx";
 import { useSocketContext } from "./SocketStateContext.jsx";
 
 const iceServers = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
+  iceServers: [
+    { urls: "stun:stun.l.google.com:19302" },
+    { urls: "stun:stun1.l.google.com:19302" },
+    {
+      urls: "turn:openrelay.metered.ca:80",
+      username: "openrelayproject",
+      credential: "openrelayproject",
+    },
+    {
+      urls: "turn:openrelay.metered.ca:443",
+      username: "openrelayproject",
+      credential: "openrelayproject",
+    },
+    {
+      urls: "turn:openrelay.metered.ca:443?transport=tcp",
+      username: "openrelayproject",
+      credential: "openrelayproject",
+    },
+  ],
 };
 
 export const CallProvider = ({ children }) => {
@@ -108,16 +126,19 @@ export const CallProvider = ({ children }) => {
 
       peerConnection.ontrack = (event) => {
         console.log("Received remote track:", event.track.kind);
-        const incomingStream = event.streams?.[0] || new MediaStream([event.track]);
-        console.log("Setting remote stream with tracks:", incomingStream.getTracks().length);
-        setRemoteStream(incomingStream);
+        if (event.streams && event.streams[0]) {
+          console.log("Setting remote stream with tracks:", event.streams[0].getTracks().length);
+          setRemoteStream(event.streams[0]);
+        } else {
+          // Fallback: build stream from individual track
+          setRemoteStream((prev) => {
+            const stream = prev || new MediaStream();
+            stream.addTrack(event.track);
+            return stream;
+          });
+        }
       };
 
-      peerConnection.addEventListener("track", (event) => {
-        console.log("Track event listener:", event.track.kind);
-        const incomingStream = event.streams?.[0] || new MediaStream([event.track]);
-        setRemoteStream(incomingStream);
-      });
 
       peerConnection.onconnectionstatechange = () => {
         if (["failed", "closed", "disconnected"].includes(peerConnection.connectionState)) {
