@@ -70,8 +70,8 @@ describe("User API — POST /api/user/signup", () => {
       .field("confirmPassword", "Pass1234!");
 
     expect(res.status).toBe(201);
-    expect(res.body.user.profilePicture).toMatch(/^https?:\/\//i);
     expect(res.body.user.profilePicture).toContain("/uploads/profiles/");
+    expect(res.body.user.profilePicture).toMatch(/^\//); // relative path
   });
 
   test("❌ fails when passwords do not match", async () => {

@@ -53,7 +53,7 @@ export const signup = async (req, res) => {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
-        profilePicture: getPublicFileUrl(req, newUser.profilePicture),
+        profilePicture: newUser.profilePicture, // relative path e.g. /uploads/profiles/...
       },
     });
   } catch (error) {
@@ -83,7 +83,7 @@ export const login = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
-        profilePicture: getPublicFileUrl(req, user.profilePicture),
+        profilePicture: user.profilePicture, // relative path
       },
     });
   } catch (error) {
@@ -109,7 +109,7 @@ export const allUsers = async (req, res) => {
 
     const normalizedUsers = filteredUsers.map((user) => ({
       ...user.toObject(),
-      profilePicture: getPublicFileUrl(req, user.profilePicture),
+      // profilePicture is already a relative path stored in DB
     }));
 
     res.status(201).json(normalizedUsers);
@@ -127,7 +127,7 @@ export const session = async (req, res) => {
         _id: req.user._id,
         name: req.user.name,
         email: req.user.email,
-        profilePicture: getPublicFileUrl(req, req.user.profilePicture),
+        profilePicture: req.user.profilePicture, // relative path
       },
     });
   } catch (error) {
