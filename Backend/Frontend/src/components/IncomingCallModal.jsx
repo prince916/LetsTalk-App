@@ -9,7 +9,7 @@ function IncomingCallModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm">
       <div className="animate-fade-in w-full max-w-sm rounded-[28px] border border-white/10 bg-slate-900/95 p-6 text-center text-white shadow-2xl shadow-black/40">
-        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-sky-500/20 to-blue-600/20 text-2xl font-bold text-sky-300 ring-1 ring-sky-400/20">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-sky-500/20 to-blue-600/20 text-2xl font-bold text-sky-300 ring-1 ring-sky-400/20">
           {incomingCall.fromName?.charAt(0).toUpperCase()}
         </div>
         <h2 className="text-xl font-semibold">{incomingCall.fromName}</h2>

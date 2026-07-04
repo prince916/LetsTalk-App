@@ -43,7 +43,7 @@ function Login() {
       <div className="w-full max-w-5xl overflow-hidden rounded-4xl border border-white/10 bg-slate-900/80 shadow-2xl shadow-black/40 backdrop-blur-xl">
         <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
           {/* Left side illustration */}
-          <div className="hidden lg:flex flex-col justify-between bg-linear-to-br from-sky-500/20 via-slate-900 to-blue-600/20 p-10">
+          {/* <div className="hidden lg:flex flex-col justify-between bg-linear-to-br from-sky-500/20 via-slate-900 to-blue-600/20 p-10">
             <div>
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/20 text-sky-300 shadow-lg shadow-sky-500/10">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -55,15 +55,15 @@ function Login() {
                 Message privately, join group conversations, and enjoy fast, seamless communication—all in one place.
               </p>
             </div>
-            {/* <div className="space-y-3 text-sm text-slate-200">
+            <div className="space-y-3 text-sm text-slate-200">
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" /> Fast and secure messaging
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-sky-400" /> Modern group and direct chat flow
               </div>
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
           {/* Right side form */}
           <div className="p-8 sm:p-10 lg:p-12">

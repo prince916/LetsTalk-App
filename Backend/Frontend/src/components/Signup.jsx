@@ -56,7 +56,8 @@ function Signup() {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(56,189,248,0.18),transparent_35%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] px-4 py-8 sm:px-6 lg:px-8 flex items-center justify-center">
       <div className="w-full max-w-5xl overflow-hidden rounded-4xl border border-white/10 bg-slate-900/80 shadow-2xl shadow-black/40 backdrop-blur-xl">
         <div className="grid lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="hidden lg:flex flex-col justify-between bg-linear-to-br from-slate-700/60 via-slate-900 to-sky-600/20 p-10">
+          {/* Left side illustration */}
+          {/* <div className="hidden lg:flex flex-col justify-between bg-linear-to-br from-slate-700/60 via-slate-900 to-sky-600/20 p-10">
             <div>
               <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-500/20 text-sky-300 shadow-lg shadow-sky-500/10">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -68,16 +69,17 @@ function Signup() {
                 Connect instantly through private chats, group conversations, and a seamless messaging experience.
               </p>
             </div>
-            {/* <div className="space-y-3 text-sm text-slate-200">
+            <div className="space-y-3 text-sm text-slate-200">
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" /> Personalized chat experience
               </div>
               <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
                 <span className="h-2.5 w-2.5 rounded-full bg-sky-400" /> Easier group management and updates
               </div>
-            </div> */}
-          </div>
+            </div>
+          </div> */}
 
+           {/* Right side form */}
           <div className="p-8 sm:p-10 lg:p-12">
             <div className="mb-8">
               <p className="text-sm font-semibold uppercase tracking-[0.35em] text-sky-400">Create account</p>
