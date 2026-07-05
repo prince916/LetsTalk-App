@@ -21,6 +21,7 @@ const server = http.createServer(app);
 // ✅ Declare before usage
 const users = {};
 const groupRooms = {}; // Track group rooms and their members
+const activeCalls = {}; // Track active/pending calls: { socketId: partnerSocketId }
 
 export const getReceiverSocketId = (receiverId) => {
   return users[receiverId];
@@ -125,6 +126,9 @@ io.on("connection", (socket) => {
       socket.emit("callUnavailable");
       return;
     }
+    // Track the pending call so disconnect handler can notify the other party
+    activeCalls[socket.id] = receiverSocketId;
+    activeCalls[receiverSocketId] = socket.id;
     io.to(receiverSocketId).emit("incomingCall", { from, fromName, offer });
   });
 
@@ -146,20 +150,33 @@ io.on("connection", (socket) => {
     const receiverSocketId = getReceiverSocketId(to);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("callRejected", { from: userId, reason });
+      delete activeCalls[receiverSocketId];
     }
+    delete activeCalls[socket.id];
   });
 
   socket.on("endCall", ({ to }) => {
     const receiverSocketId = getReceiverSocketId(to);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("callEnded", { from: userId });
+      delete activeCalls[receiverSocketId];
     }
+    delete activeCalls[socket.id];
   });
 
   // ========== DISCONNECT HANDLER ==========
 
   socket.on("disconnect", () => {
     console.log("a user disconnected", socket.id);
+
+    // If this user was in a call, notify the other party
+    const partnerSocketId = activeCalls[socket.id];
+    if (partnerSocketId) {
+      io.to(partnerSocketId).emit("callEnded", { from: userId });
+      delete activeCalls[partnerSocketId];
+      delete activeCalls[socket.id];
+    }
+
     delete users[userId];
 
     Object.keys(groupRooms).forEach((groupId) => {

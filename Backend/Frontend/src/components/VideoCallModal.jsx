@@ -29,7 +29,7 @@ function VideoCallModal() {
     });
   }, []);
 
-  // Always keep srcObject in sync — video elements are always mounted
+  // Always keep srcObject in sync — re-run when activeCall mounts the video element
   useEffect(() => {
     const el = localVideoRef.current;
     if (!el) return;
@@ -39,19 +39,18 @@ function VideoCallModal() {
     } else {
       el.srcObject = null;
     }
-  }, [localStream, tryPlay]);
+  }, [localStream, tryPlay, activeCall]);
 
   useEffect(() => {
     const el = remoteVideoRef.current;
     if (!el) return;
     if (remoteStream) {
-      console.log("Setting remote stream, tracks:", remoteStream.getTracks().length);
       el.srcObject = remoteStream;
       tryPlay(el);
     } else {
       el.srcObject = null;
     }
-  }, [remoteStream, tryPlay]);
+  }, [remoteStream, tryPlay, activeCall]);
 
   const handleTapToPlay = useCallback(() => {
     setNeedsTap(false);

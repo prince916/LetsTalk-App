@@ -38,6 +38,7 @@ export const CallProvider = ({ children }) => {
   const pendingCandidatesRef = useRef([]);
   const activeCallRef = useRef(null);
   const localStreamRef = useRef(null);
+  const incomingCallRef = useRef(null);
 
   useEffect(() => {
     activeCallRef.current = activeCall;
@@ -46,6 +47,10 @@ export const CallProvider = ({ children }) => {
   useEffect(() => {
     localStreamRef.current = localStream;
   }, [localStream]);
+
+  useEffect(() => {
+    incomingCallRef.current = incomingCall;
+  }, [incomingCall]);
 
   const stopLocalStream = useCallback(() => {
     localStreamRef.current?.getTracks().forEach((track) => track.stop());
@@ -83,7 +88,6 @@ export const CallProvider = ({ children }) => {
     }
 
     try {
-      console.log("Requesting media stream...");
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: { ideal: 1280 },
@@ -95,7 +99,8 @@ export const CallProvider = ({ children }) => {
           autoGainControl: true,
         },
       });
-      console.log("Media stream obtained successfully:", stream.getTracks().length, "tracks");
+      // Sync ref immediately so toggleMute/toggleCamera work without waiting for a render cycle
+      localStreamRef.current = stream;
       setLocalStream(stream);
       return stream;
     } catch (error) {
@@ -141,7 +146,7 @@ export const CallProvider = ({ children }) => {
 
 
       peerConnection.onconnectionstatechange = () => {
-        if (["failed", "closed", "disconnected"].includes(peerConnection.connectionState)) {
+        if (["failed", "closed"].includes(peerConnection.connectionState)) {
           cleanupCall();
         }
       };
@@ -159,26 +164,24 @@ export const CallProvider = ({ children }) => {
       }
 
       try {
-        console.log("Starting video call to:", receiver.name);
         const stream = await getMediaStream();
-        console.log("Got local stream with tracks:", stream.getTracks().length);
-        
-        const peerConnection = createPeerConnection(receiver._id);
-        stream.getTracks().forEach((track) => {
-          console.log("Adding track:", track.kind);
-          peerConnection.addTrack(track, stream);
-        });
 
-        const offer = await peerConnection.createOffer();
-        await peerConnection.setLocalDescription(offer);
-        console.log("Created and set local description");
-
+        // Show modal immediately so the caller sees their own video
+        // while the offer is being created
         setActiveCall({
           userId: receiver._id,
           name: receiver.name,
           status: "calling",
           isIncoming: false,
         });
+
+        const peerConnection = createPeerConnection(receiver._id);
+        stream.getTracks().forEach((track) => {
+          peerConnection.addTrack(track, stream);
+        });
+
+        const offer = await peerConnection.createOffer();
+        await peerConnection.setLocalDescription(offer);
 
         socket.emit("callUser", {
           to: receiver._id,
@@ -284,9 +287,7 @@ export const CallProvider = ({ children }) => {
     if (!socket) return;
 
     socket.on("incomingCall", (call) => {
-      console.log("Incoming call from:", call.fromName);
-      if (activeCallRef.current || incomingCall) {
-        console.log("Already in call, rejecting");
+      if (activeCallRef.current || incomingCallRef.current) {
         socket.emit("rejectCall", { to: call.from, reason: "busy" });
         return;
       }
@@ -351,7 +352,7 @@ export const CallProvider = ({ children }) => {
       socket.off("callEnded");
       socket.off("callUnavailable");
     };
-  }, [cleanupCall, flushPendingCandidates, incomingCall, socket]);
+  }, [cleanupCall, flushPendingCandidates, socket]);
 
   return (
     <CallContext.Provider
